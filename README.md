@@ -4,7 +4,7 @@
 |-------------|-----------|-----|
 |Hugo Bexell|hbex00|hugobex@live.com|
 |Axel Håkansson|Just-Another-Programer|axel.hakansson8@gmail.com|
-|name3|member3|email3|
+|William Klasson|Irodoot|Irodoot@gmail.com|
 |name4|member4|email4|
 |name5|member5|email5|
 |name6|member6|email6|
@@ -14,3 +14,4 @@
 
 ### I, Hugo Bexell, declare that I am the sole author of the content I add to this repository.
 ### I, Axel Håkansson, declare that I am the sole author of the content I add to this repository.
+### I, William Klasson, declare that I am the sole author of the content I add to this repository.
