@@ -11,3 +11,5 @@
 
 
 ## We are developing a recipe webpage, with probably a python backend and a database
+
+###I, Hugo Bexell, declare that I am the sole author of the content I add to this repository.
