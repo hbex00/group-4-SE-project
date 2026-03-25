@@ -4,7 +4,7 @@
 |-------------|-----------|-----|
 |Hugo Bexell|hbex00|behu23hw@student.ju.se|
 |Axel Håkansson|Just-Another-Programer|axel.hakansson8@gmail.com|
-|William Klasson|Irodoot|Irodoot@gmail.com|
+|William Klasson|Irodoot|klwi24jt@student.ju.se|
 |Samuel Johansson|Itchingtree|josa24ym@student.ju.se|
 |Noah Haraldsson|NoahHaraldsson1337|hano24if@student.ju.se|
 |name6|member6|email6|
