@@ -5,7 +5,7 @@
 |Hugo Bexell|hbex00|hugobex@live.com|
 |Axel Håkansson|Just-Another-Programer|axel.hakansson8@gmail.com|
 |William Klasson|Irodoot|Irodoot@gmail.com|
-|name4|member4|email4|
+|Samuel Johansson|Itchingtree|josa24ym@student.ju.se|
 |name5|member5|email5|
 |name6|member6|email6|
 
@@ -15,3 +15,4 @@
 ### I, Hugo Bexell, declare that I am the sole author of the content I add to this repository.
 ### I, Axel Håkansson, declare that I am the sole author of the content I add to this repository.
 ### I, William Klasson, declare that I am the sole author of the content I add to this repository.
+### I, Samuel Johansson, declare that I am the sole author of the content I add to this repository.
