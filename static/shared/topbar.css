@@ -1,27 +1,47 @@
-body{
-    margin: 0;
+:root{
+    --topbar_height: 8vh;
+    --topbar_logo_padding: 10px;
 }
 
+body{
+    margin: 0;
+    background-color: #fff5e1;
+}
+
+h1{
+    margin: 0;
+}
 
 .top_bar{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-content: center;
-    height: 10vh;
+    height: var(--topbar_height);
+    border-bottom: 2px solid black;
+    background-color: #f0e7d6;
 }
 
 .logo{
-    width: 10vh;
-    background-color: aliceblue;
+    aspect-ratio: 1/1;
+    background-color: rgb(88, 128, 164);
+    padding: var(--topbar_logo_padding);
+}
+
+.logo:hover{
+    background-color: red;
 }
 
 .title{
     width: 30%;
     background-color: burlywood;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .user_icon{
-    width: 10vh;
+    aspect-ratio: 1/1;
     background-color: chartreuse;
+    padding: var(--topbar_logo_padding);
 }
