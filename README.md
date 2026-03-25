@@ -2,7 +2,7 @@
 
 |Group Members|git handels|email|
 |-------------|-----------|-----|
-|Hugo Bexell|hbex00|hugobex@live.com|
+|Hugo Bexell|hbex00|behu23hw@student.ju.se|
 |Axel Håkansson|Just-Another-Programer|axel.hakansson8@gmail.com|
 |William Klasson|Irodoot|Irodoot@gmail.com|
 |Samuel Johansson|Itchingtree|josa24ym@student.ju.se|
