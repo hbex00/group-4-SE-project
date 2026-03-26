@@ -10,6 +10,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # creates sqlAlchemy instance
 db = SQLAlchemy(app)
 
+
+class Recipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+
 if __name__ == '__main__':
     with app.app_context():  # Needed for DB operations
         db.create_all()      # Creates the database and tables
