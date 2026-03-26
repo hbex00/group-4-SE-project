@@ -19,7 +19,7 @@ as well as uploading reviews to existing public recipes.
 
 ### The following details entail the languages and dependencies utilized in this project.
 
-The project will be featuring a database utilizing __flask__, __SQL-alchemy__, and __SQL-lite__.\
+The Project's web-server uses the framework __flask__ and will connect to the database utilizing __SQL-alchemy__, and __SQL-lite__.\
 The backend will be comprised of __python__.\
 The frontend will be a mixture of __HTML__ and __CSS__. User interaction through __javascript__.
 
