@@ -1,0 +1,4 @@
+#ignore database files there local
+*.db
+#ignore local venv
+.venv/
