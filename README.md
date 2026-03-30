@@ -40,6 +40,10 @@ Our plan is to have a working main branch and for us to have separate branches f
 
 We plan to use pull requests for the main branch in the future, once we have learned it. Also, all commits should have meaningful and informative comments. 
 
+we have a kanbanbord here [kanban board][]
+
+[Kanban board]: https://github.com/users/hbex00/projects/2
+
 
 
 ## Declaration of Authorship
