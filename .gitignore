@@ -4,3 +4,5 @@
 .venv/
 venv/
 __pycache__
+#ignore __pycache__ files
+app/__pycache__/
