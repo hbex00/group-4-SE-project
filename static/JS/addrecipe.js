@@ -1,28 +1,52 @@
+const add_step_btn = document.getElementById("step_btn");
 
+const step_div_location = document.querySelector(".step");
+
+let j = 0;
+
+add_step_btn.addEventListener("click", () => {
+    if (j < 20) {
+        const new_step = document.createElement("input");
+        new_step.name = "step[]";
+        new_step.placeholder = `Step ${j + 1}`;
+        new_step.size = 40;
+
+        step_div_location.appendChild(new_step);
+        j++;
+    }
+});
 
 const add_ingredient_btn = document.getElementById("ingredient_btn");
 
-const ingredient_div_location = document.querySelector(".tmp");
+const ingredient_div_location = document.querySelector(".ingredient");
+
+let i = 0;
 
 add_ingredient_btn.addEventListener("click", () => {
-    const new_div = document.createElement("div");
-    new_div.className = "ingredient_div";
-    
-    const new_ingredient_input_box = document.createElement("input");
-    new_ingredient_input_box.type = "input";
-    new_ingredient_input_box.placeholder = "Ingredient name";
-    new_ingredient_input_box.size = 50;
-    new_div.appendChild(new_ingredient_input_box);
+    if (i < 20) {
+        const new_div = document.createElement("div");
+        new_div.className = "ingredient_div";
+        
+        const new_ingredient_input_box = document.createElement("input");
+        new_ingredient_input_box.type = "input";
+        new_ingredient_input_box.placeholder = `Ingredient ${i + 1}`;
+        new_ingredient_input_box.size = 50;
+        new_ingredient_input_box.name = "ingredients[]";
+        new_div.appendChild(new_ingredient_input_box);
 
-    const new_amount_input_box = document.createElement("input");
-    new_amount_input_box.placeholder = "Amount";
-    new_amount_input_box.size = 5;
-    new_div.appendChild(new_amount_input_box);
+        const new_amount_input_box = document.createElement("input");
+        new_amount_input_box.placeholder = "Amount";
+        new_amount_input_box.size = 5;
+        new_amount_input_box.name = "amount[]";
+        new_div.appendChild(new_amount_input_box);
 
-    const new_unit_input_box = document.createElement("input");
-    new_unit_input_box.placeholder = "unit";
-    new_unit_input_box.size = 10;
-    new_div.appendChild(new_unit_input_box);
+        const new_unit_input_box = document.createElement("input");
+        new_unit_input_box.placeholder = "unit";
+        new_unit_input_box.size = 10;
+        new_unit_input_box.name = "name[]";
+        new_div.appendChild(new_unit_input_box);
 
-    ingredient_div_location.appendChild(new_div);
+        ingredient_div_location.appendChild(new_div);
+        i++;
+    }
 });

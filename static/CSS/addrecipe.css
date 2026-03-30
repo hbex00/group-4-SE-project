@@ -11,3 +11,13 @@
     display: flex;
     flex-direction: column;
 }
+
+.ingredient {
+    display: flex;
+    flex-direction: column;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+}
