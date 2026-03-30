@@ -3,3 +3,5 @@
 #ignore local venv
 .venv/
 venv/
+#ignore __pycache__ files
+app/__pycache__/
