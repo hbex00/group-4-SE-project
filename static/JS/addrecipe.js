@@ -15,7 +15,28 @@ add_step_btn.addEventListener("click", () => {
         j++;
     }
 });
+document.getElementById("recipeForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
+  const recipe = {
+    title: document.getElementById("title").value,
+    ingredients: document.getElementById("ingredients").value,
+    instructions: document.getElementById("instructions").value
+  };
+
+  // get existing recipes
+  let recipes = JSON.parse(localStorage.getItem("recipes")) || [];
+
+  // add new recipe
+  recipes.push(recipe);
+
+  // save
+  localStorage.setItem("recipes", JSON.stringify(recipes));
+
+  alert("Recipe added successfully!");
+
+  this.reset();
+});
 const add_ingredient_btn = document.getElementById("ingredient_btn");
 
 const ingredient_div_location = document.querySelector(".ingredient");
