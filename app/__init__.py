@@ -12,14 +12,12 @@ def create_app():
     from .routes.home import home_bp
     app.register_blueprint(home_bp)
 
-<<<<<<< HEAD
+
     from .routes.create import create_bp
     app.register_blueprint(create_bp)
 
-     # Create database
-=======
+
     # Create database
->>>>>>> 219bc5c9e4175254adff51fc049b734badd67771
     with app.app_context():
         db.create_all()
 
