@@ -1,4 +1,4 @@
-from database.db import db
+from app.database.db import db
 #Put all tables in this file.
 
 # Table for recipe, Has a foreign key to one user

@@ -5,15 +5,15 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    from database.db import db
+    from app.database.db import db
     db.init_app(app)
 
     # To access the routes add a .new_route and register blueprint
-    from .routes.home import home_bp
+    from .homepage.route import home_bp
     app.register_blueprint(home_bp)
 
 
-    from .routes.create import create_bp
+    from .addrecipe.route import create_bp
     app.register_blueprint(create_bp)
 
 

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, Blueprint
-from database.db import db
-from app.services.models import Recipe
+from app.database.db import db
+from app.database.tables import Recipe
 
 
 create_bp = Blueprint("create", __name__)
