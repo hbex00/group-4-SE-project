@@ -8,11 +8,11 @@ def create_app():
     from database.db import db
     db.init_app(app)
 
-    # To acsses the routs just add a ,new_rout and regester blueprint
+    # To access the routes add a .new_route and register blueprint
     from .routes.home import home_bp
     app.register_blueprint(home_bp)
 
-     # Create database
+    # Create database
     with app.app_context():
         db.create_all()
 
