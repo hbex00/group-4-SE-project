@@ -8,4 +8,7 @@ view_bp = Blueprint("view", __name__)
 def view():
     id = request.form.get('recipe_id')
     recipe = Recipe.query.get(id)
-    return render_template('viewrecipe.html', recipe=recipe)
+    if not recipe:
+        return str(id)
+    else:
+        return render_template('viewrecipe.html', recipe=recipe)
