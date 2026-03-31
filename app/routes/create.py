@@ -10,8 +10,11 @@ create_bp = Blueprint("create", __name__)
 def create():
     if request.method == 'POST':
         recipe_name = request.form['title']
-        new_recipe = Recipe(recipe_title = recipe_name)
+        recipe_description = request.form['description']
 
+        new_recipe = Recipe(recipe_title = recipe_name, description=recipe_description)
+
+        
         try:
             db.session.add(new_recipe)
             db.session.commit()

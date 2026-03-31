@@ -20,5 +20,17 @@
             <input type="text" size 10>
             <input type="submit" size="10">
         </form>
+
+        <div style="text-align: center;">
+            {% if recipies|length > 0 %}
+                {% for recipe in recipies %}
+                    <h4>{{recipe.id}}.  {{recipe.recipe_title}}</h4>
+                    <h5> {{recipe.description}}</h5>
+                {% endfor %}
+            {% else %}
+                <p>No recipes found.</p>
+            {% endif %}
+        </div>
     </div>
+
 {% endblock %}
