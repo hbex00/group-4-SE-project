@@ -20,6 +20,7 @@ Current features are:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/CSS/topbar.css">
+    <link rel="stylesheet" href="../static/CSS/footer.css">
     {% block head %} {% endblock %}
 </head>
     <body>
@@ -52,9 +53,12 @@ Current features are:
                 </div>
             </form>
         </header>
-        {% block main_body %} {% endblock%}
         <script src="../static/JS/topbar.js"></script>
-        <main></main>
-        <footer></footer>
+        <main>
+            {% block main_body %} {% endblock%}
+        </main>
+        <footer>
+            {% block bottom%} {% endblock%}
+        </footer>
     </body>
 </html>

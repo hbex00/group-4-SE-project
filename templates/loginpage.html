@@ -10,18 +10,27 @@
 
 {% block main_body %}
         <div class="login-page">
-            <form action="/login" method="post">
-                <div class="login">
-                    <h2>login to your account</h2>
-                    <input type="text" name="username" placeholder="Username" size="12">
-                    <input type="password" name="password" placeholder="password" size="12">
-                    <input type="submit"value="Login">
-                </div>
-            </form> 
+            <div class="border">
+                <form action="/login" method="post">
+                    <div class="login">
+                        <h2>Login to your account</h2>
+                        <input type="text" name="username" placeholder="Username" size="12">
+                        <input type="password" name="password" placeholder="password" size="12">
+                        <input type="submit"value="Login">
+                    </div>
+                </form> 
 
-            <form action="/register" method="post">
-                <input type="submit" value="register">
-            </form>
+                <form action="/register" method="post">
+                    <input type="submit" value="register">
+                </form>
+            </div>
         </div>
         <script src="../static/JS/loginpage.js"></script>
+{% endblock %}
+
+{% block bottom %}
+    <p>It is prohibeted from accessing a account you do
+            not have premition to access and coulde led to 
+            legal consiqvences
+        </p>
 {% endblock %}
