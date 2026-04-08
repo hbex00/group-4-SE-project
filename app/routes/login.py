@@ -14,6 +14,8 @@ def check_password(self, password):
 
 @login_bp.route('/login', methods=['POST', 'GET'])
 def login():
+    if 'username' in session:
+        return render_template('hompage.html', session['username'])
     if request.method == 'GET':
         #include session
         return render_template('loginpage.html')
