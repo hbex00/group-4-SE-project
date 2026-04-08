@@ -20,6 +20,9 @@ def create_app():
     from .routes.view import view_bp
     app.register_blueprint(view_bp)
 
+    from .routes.logout import logout_bp
+    app.register_blueprint(logout_bp)
+
 
     # Create database
     with app.app_context():
