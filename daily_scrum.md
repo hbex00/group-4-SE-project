@@ -15,7 +15,7 @@
 - Will do: Continue with what they have done so far.
 - Blocker: Not yet having users created in the database.
 
-### (*) Noah Haraldson
+### (*) Noah Haraldsson
 not present for today's daily meeting.
 - Will do: Will work on logout-everywhere function.
 - Blocker: Nothing currently blocking.
