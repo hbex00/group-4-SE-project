@@ -3,7 +3,7 @@
 ### (*) Axel Håkanson and Bjarne Svensson. 
 - Done: Bjarne and Axel is doing pair programming for creating the create user accounts in a separate branch. They have done the basic logic and template.
 - Will do: Continue with what they have done so far.
-- Blockers: Understand password hashing 
+- Blockers: Understand password hashing
 
 ### (*) William Klasson
 - Done: William has updated the the database and created the logout functionality and added username check on create recipes. 
@@ -17,3 +17,5 @@
 
 ### (*) Noah Haraldson
 not present for today's daily meeting.
+- Will do: Will work on logout-everywhere function.
+- Blocker: Nothing currently blocking.
