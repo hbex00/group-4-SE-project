@@ -10,5 +10,15 @@ def register():
         username = request.form['username']
         password1 = request.form['password1']
         password2 = request.form['password2']
+
+        if password1 == password2:    
+            new_user : User
+            new_user(name=username,password=password1)
+            try:
+                db.session.add(new_user)                    
+                db.session.commit()
+                return redirect('/') # Temporary, needs to be changed. Make issue or something.
+            except:
+                return 'there was an error'
     else:
         return render_template('registerpage.html')
