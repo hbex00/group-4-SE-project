@@ -10,7 +10,7 @@ create_bp = Blueprint("create", __name__)
 def create():
 
     # Takes the user to login-page if they are not logged in.
-    if session.pop('username') is None:
+    if session.get('username') is None:
         return redirect('/login')
 
 
