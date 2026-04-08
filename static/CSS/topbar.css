@@ -47,21 +47,27 @@ header{
 
 ul{
     display: flex;
+    padding: 0;
+}
+
+.title ul{
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
-    padding: 0;
 }
 
 li{
     list-style-type: none;
-    padding: 5px 10px 5px 10px;
-    border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
 }
 
-li:hover{
+.title li{
+    padding: 5px 10px 5px 10px;
+    border-radius: 20px; 
+}
+
+.title li:hover{
     color:var(--base-green);
 }
 
@@ -73,8 +79,58 @@ li:hover{
     display: flex;
     padding: calc(var(--topbar_logo_padding) / 2);
     cursor: pointer;
+    position: relative;
+}
+
+.user_icon p{
+    display: flex;
+    font-size: 2em;
+    font-weight: 800;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+    margin-right: 15px;
+}
+
+.user_icon:hover .dropdown_content{
+    display: block;
 }
 
 #user_icon{
     color: var(--base-green);
+}
+
+.dropdown_content{
+    position: absolute;
+    display: none;
+    background-color: aqua;
+    margin-top: calc(var(--topbar_height) * 0.95);
+    right: 0;
+    left: auto;
+    width: 8vw;
+    height: 20vh;
+    z-index: 1;
+    border-bottom-left-radius: 20px;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    cursor: default;
+}
+
+.dropdown_content ul{
+    flex-direction: column;
+    margin: 0;
+    height: 100%;
+}
+
+.dropdown_content li{
+    display: flex;
+    align-items: center;
+    float: left;
+    margin: 15px;
+    padding: 10px;
+    background-color: #1B6D24;
+    height: 50%;
+    font-size: 1.5em;
+    font-weight: 600;
+    cursor: pointer;
 }
