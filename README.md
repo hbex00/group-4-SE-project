@@ -67,7 +67,8 @@ we have a kanbanbord here [kanban board][]
 
 4. Start the program
 
-        $ py run.py
+        (windows): $ py run.py
+        (linux): $ python3 run.py
 
 5. Connect to the loopback-address
 
