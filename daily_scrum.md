@@ -19,3 +19,25 @@
 not present for today's daily meeting.
 - Will do: Will work on logout-everywhere function.
 - Blocker: Nothing currently blocking.
+
+
+## daily_scrum 2026-04-09 12:51
+### (*) Samuel Johanson
+- Done: No current updates for this meeting.
+- Will do: No remaining tasks on the current sprint; will continue with open issues.
+- Blockers: Nothing is currently blocking.
+
+### (*) Hugo Bexell and William Klasson
+- Done: Implemented the last of the login functionality and integrated the register account to the login account.
+- Will do: No remaining tasks on the current sprint; will continue with open issues. 
+- Blockers: Nothing is currently blocking.
+
+### (*) Axel Håkanson and Bjarne Svensson
+- Done: Bjarne and Axel has finished their sprint assignments; implemented the register page and merged it to main branch.
+- Will do: No remaining tasks on the current sprint; will continue with open issues.
+- Blockers: Nothing is currently blocking.
+
+### (*) Noah Haraldsson
+- Done: Implemented the logout button and begun working on a dropdown menu
+- Will do: Complete and merge the final features.
+- Blocker: Nothing is currently blocking.
