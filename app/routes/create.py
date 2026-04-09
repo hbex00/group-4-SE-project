@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Blueprint
+from flask import Flask, render_template, request, redirect, Blueprint, session
 from database.db import db
 from app.services.models import *
 
@@ -8,6 +8,12 @@ create_bp = Blueprint("create", __name__)
 # Routes to /create where user can create a recipe
 @create_bp.route('/create',methods = ['POST','GET'])
 def create():
+
+    # Takes the user to login-page if they are not logged in.
+    if session.get('username') is None:
+        return redirect('/login')
+
+
     if request.method == 'POST':
         recipe_name = request.form['title']
         recipe_description = request.form['description']
@@ -18,8 +24,13 @@ def create():
 
         recipe_steps = request.form.getlist('step[]')
 
-        new_recipe = Recipe(recipe_title = recipe_name, description=recipe_description)
-        
+        username = session.get('username')
+        recipe_creator = User.query.filter_by(name=username).first()
+
+        new_recipe = Recipe(recipe_title = recipe_name, 
+                            description = recipe_description, 
+                            user_id = recipe_creator.id)
+
         try:
             db.session.add(new_recipe)
             db.session.commit()

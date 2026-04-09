@@ -10,13 +10,18 @@ class Recipe(db.Model):
 
     ingredients = db.relationship('Ingredient', back_populates='recipe')
     steps = db.relationship('Step', back_populates='recipe')
+    user = db.relationship('User', back_populates='recipies')
+
 
 # Table for User
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    email = db.Column(db.String(50), unique=True)
-    password = db.Column(db.String(50))
+    name = db.Column(db.String(50), unique=True)
+    #email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(256))
+
+    recipies = db.relationship('Recipe', back_populates='user')
+
 
 # Table for Inredient, Each ingredient has a foreign key to a recipe
 class Ingredient(db.Model):
