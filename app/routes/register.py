@@ -18,9 +18,11 @@ def register():
             try:
                 db.session.add(new_user)                    
                 db.session.commit()
-                return redirect('/') # Temporary, needs to be changed. Make issue or something.
+                return redirect('/') # Temporary, needs change. Future enhancement.
             except:
-                return 'there was an error'
+                return 'there was an error' # Temporary, needs change. Future enhancement.
+        else:
+            return 'passwords does not match.' # Temporary, needs change. Future enhancement.
     else:
         return render_template('registerpage.html')
 
