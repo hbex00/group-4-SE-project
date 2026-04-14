@@ -32,7 +32,8 @@ def create():
         try:
             #function that creats a new recipe
             new_recipe = create_recepie(recipe_name, recipe_description, recipe_creator.id)
-
+            db.session.add(new_recipe)
+            db.session.commit()
         except:
             return 'there was an error adding the recipe'
         
@@ -56,8 +57,5 @@ def create_recepie(name, description, user_id):
             recipe_title=name,
             description=description,
             user_id=user_id)
-
-        db.session.add(recipe)
-        db.session.commit()
 
         return recipe
