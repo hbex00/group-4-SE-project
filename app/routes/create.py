@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, Blueprint, session
 from database.db import db
 from app.services.models import *
+from app.utils.modify_db import *
 
 
 create_bp = Blueprint("create", __name__)
@@ -27,37 +28,34 @@ def create():
         username = session.get('username')
         recipe_creator = User.query.filter_by(name=username).first()
 
-        new_recipe = Recipe(recipe_title = recipe_name, 
-                            description = recipe_description, 
-                            user_id = recipe_creator.id)
-
+        
         try:
+            #function that creats a new recipe
+            new_recipe = create_recepie(recipe_name, recipe_description, recipe_creator.id)
             db.session.add(new_recipe)
             db.session.commit()
-            # to be able to add ingredents we split up the list that we get from front end 
-            for recipe_ingredients, recipe_amounts, recipe_units in zip(recipe_ingredients, recipe_amounts, recipe_units):
-                if recipe_ingredients.strip() != "":
-                    new_ingredient = Ingredient(name = recipe_ingredients, 
-                                                amount = recipe_amounts, 
-                                                unit = recipe_units, 
-                                                recipe_id=new_recipe.id)
-                    
-                    db.session.add(new_ingredient)
-
-            # Creates a new step for each step sent from frontend and adds it to the database
-            for recipe_step in recipe_steps:
-                if recipe_step.strip() != "":
-                    new_step = Step(name=recipe_step,
-                                    recipe_id=new_recipe.id)
-
-                    db.session.add(new_step)
-
-            db.session.commit()
-
-            return redirect('/')
         except:
-            return 'there was an error'
+            return 'there was an error adding the recipe'
+        
+        #Zips three lists that are ingredients, amounts, and units
+        ingredients = zip(recipe_ingredients, recipe_amounts, recipe_units)
 
+        #Calls ingredients_add with the tuple from zip
+        ingredients_add(ingredients, new_recipe.id)
+
+        steps_add(recipe_steps, new_recipe.id )
+
+        return redirect('/')
     else:
         return render_template('addrecipe.html')
       
+
+
+
+def create_recepie(name, description, user_id):
+        recipe = Recipe(
+            recipe_title=name,
+            description=description,
+            user_id=user_id)
+
+        return recipe

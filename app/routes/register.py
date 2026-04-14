@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, Blueprint
 from database.db import db
 from app.services.models import *
-from werkzeug.security import generate_password_hash
 
 register_bp = Blueprint("register", __name__)
 
@@ -11,22 +10,38 @@ def register():
         username = request.form['username']
         password1 = request.form['password1']
         password2 = request.form['password2']
-        if username.strip() == "":
-            return 'you must write a username' # Temporary, needs change. Future enhancement.
-        else:
-            if password1 == password2:
-                hashed_password = hash_password(password1)
-                new_user = User(name=username,password=hashed_password)
-                try:
-                    db.session.add(new_user)                    
-                    db.session.commit()
-                    return redirect('/') # Temporary, needs change. Future enhancement.
-                except:
-                    return 'there was an error' # Temporary, needs change. Future enhancement.
-            else:
-                return 'passwords does not match.' # Temporary, needs change. Future enhancement.
+        try:
+            register_user_database(username,password1,password2)
+            return redirect('/') # Temporary, needs change. Future enhancement.
+        except RuntimeError as err:
+            return "Error: " + str(err)
+
     else:
         return render_template('registerpage.html')
+    
+def register_user_database(username, password1, password2):
+    new_user : User
+    try:
+        new_user = register_user(username, password1, password2)
+        try:
+            db.session.add(new_user)                    
+            db.session.commit()
+        except:
+            raise RuntimeError('Database Error')
+    except RuntimeError as err:
+        raise err # passes the caught runtime error upwards.
+    
 
-def hash_password(password):
-    return generate_password_hash(password)
+
+def register_user(username, password1, password2):
+    if username.strip() == "":
+        raise RuntimeError('Empty Username')
+    if password1.strip() == "":
+        raise RuntimeError('Empty Password')
+    else:
+        if password1 == password2:
+            new_user = User(name=username)
+            new_user.set_hashed_password(password1)
+            return new_user
+        else:
+            raise RuntimeError('Password Mismatch')
