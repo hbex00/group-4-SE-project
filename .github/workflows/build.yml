@@ -19,6 +19,6 @@ jobs:
     - run: pip install pytest coverage Flask-SQLAlchemy
     - run: python --version
     - run: PYTHONPATH=src 
-    - run: python3 run.py
+
 
     
