@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, Blueprint
 from database.db import db
 from app.services.models import *
-from app.utils.user import *
 
 register_bp = Blueprint("register", __name__)
 
@@ -11,20 +10,28 @@ def register():
         username = request.form['username']
         password1 = request.form['password1']
         password2 = request.form['password2']
-        new_user : User
         try:
-            new_user = register_user(username, password1, password2)
-        except RuntimeError as err:
-            return 'Error: ' + str(err)
-        try:
-            db.session.add(new_user)                    
-            db.session.commit()
+            register_user_database(username,password1,password2)
             return redirect('/') # Temporary, needs change. Future enhancement.
-        except:
-            return 'there was an error' # Temporary, needs change. Future enhancement.
+        except RuntimeError as err:
+            return "Error: " + str(err)
+
     else:
         return render_template('registerpage.html')
     
+def register_user_database(username, password1, password2):
+    new_user : User
+    try:
+        new_user = register_user(username, password1, password2)
+        try:
+            db.session.add(new_user)                    
+            db.session.commit()
+        except:
+            raise RuntimeError('Database Error')
+    except RuntimeError as err:
+        raise err # passes the caught runtime error upwards.
+    
+
 
 def register_user(username, password1, password2):
     if username.strip() == "":
@@ -34,7 +41,7 @@ def register_user(username, password1, password2):
     else:
         if password1 == password2:
             new_user = User(name=username)
-            User.create_hashed_password(password1)
+            new_user.set_hashed_password(password1)
             return new_user
         else:
             raise RuntimeError('Password Mismatch')
