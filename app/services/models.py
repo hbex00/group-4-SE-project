@@ -15,7 +15,18 @@ class Recipe(db.Model):
     user = db.relationship('User', back_populates='recipies')
     comments = db.relationship('Comment', back_populates='recipe')
     reviews = db.relationship('Review', back_populates='recipe')
-    
+
+    def review_rating(self):
+        review_count = len(self.reviews)
+        total_rating = 0
+
+        for review in self.reviews:
+            total_rating += review.rating
+
+        if review_count > 0:
+            return round(total_rating / review_count, 2)
+        else:
+            return 0
 
 
 # Table for User

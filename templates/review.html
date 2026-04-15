@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <title>Review</title>
+    <link rel="stylesheet" href="../static/CSS/review.css">
+
+{% endblock %}
+
+{% block main_body %}
+    <div class="whole_input_page">
+        <form action="/review" method="POST">
+            <div class="recipe_id_container">
+                <h2>Recipe id to review on</h2>
+                <input type="text" name="recipe_id" placeholder="Recipe id" size="20">
+            </div>
+
+            <div class="review">
+                <h2>Review</h2>
+                <input type="text" name="review" placeholder="Review (0 to 5)" size="50">
+            </div>
+
+            <input type="submit" value="Post review">
+        </form>
+    </div>
+
+    <script src="../static/JS/addrecipe.js"></script>
+
+{% endblock %}

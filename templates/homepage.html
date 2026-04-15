@@ -26,6 +26,11 @@
             <input type="submit" size="10">
         </form>
 
+        <form action="/review" method="GET">
+            <p>Add a review</p>
+            <input type="submit" size="10">
+        </form>
+
         <div style="text-align: center;">
             {% if recipies|length > 0 %}
                 {% for recipe in recipies %}
