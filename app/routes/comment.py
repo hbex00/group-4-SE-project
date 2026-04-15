@@ -12,10 +12,15 @@ def comment():
         return redirect('/login')
 
     if request.method == 'POST':
-        try: 
-            recipe_id = int(request.form['recipe_id'])
-        except:
-            return 'invalid recipe id'
+             
+        recipe_id = request.form.get('recipe_id', type = int)
+        found_recipe = Recipe.query.filter_by(id=recipe_id).first()
+        
+        if recipe_id is None:
+            return 'invalid recipe ID'
+        elif found_recipe is None:
+            return 'Recipe with this ID not found'
+        
         content = request.form['comment']
 
         username = session.get('username')
