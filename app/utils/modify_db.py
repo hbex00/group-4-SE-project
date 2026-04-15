@@ -77,7 +77,11 @@ def review_add(recipe_id, score, user_id):
         review = review_create(recipe_id, score, user_id)
 
         if review is not None:
-            db.session.add(review)
+            recipe_exist = Recipe.query.filter_by(id=recipe_id).first()
+            user_exist = User.query.filter_by(id=user_id).first()
+
+            if recipe_exist is not None and user_exist is not None:
+                db.session.add(review)
 
         db.session.commit()
     
@@ -94,7 +98,18 @@ def review_create(recipe_id, score, user_id):
         new_review = Review(recipe_id=recipe_id,
                             rating=rating,
                             user_id=user_id)
-        
+        return new_review
+    
+    elif rating > 5:
+        new_review = Review(recipe_id=recipe_id,
+                            rating=5,
+                            user_id=user_id)
+        return new_review
+    
+    elif rating < 0:
+        new_review = Review(recipe_id=recipe_id,
+                            rating=0,
+                            user_id=user_id)
         return new_review
     else:
         return None
