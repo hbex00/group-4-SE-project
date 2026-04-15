@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, Blueprint, session, flash
+from flask import Flask, render_template, request, redirect, Blueprint, session, flash, get_template_attribute
+from sqlalchemy import select
 from database.db import db
 from app.services.models import User
 from app.services.models import Recipe
@@ -37,5 +38,25 @@ def recipes():
         if not 'username' in session:
             flash('You need to log in to view your recipes!',category='error')
         else:
-            flash('You might have recipes, but I have not yet implemented the fetch function!',category='message')
+            try:
+                user : User = db.session.execute(select(User).where(User.email==session['username'])).first()
+                recipe_list = db.session.execute(select(Recipe.recipe_title).where(Recipe.user_id==user.id)).fetchall()
+                if not recipe_list:
+                    flash("I could not find any recipes!",category='error')
+                else:                           
+                    template_recipes = get_template_attribute('userpage.html', 'recipe_list')
+                    return template_recipes(recipe_list)
+            except AttributeError as err:
+                flash("It seems you do not have any recipes!",category='error')
         return render_template('userpage.html')
+    
+
+
+    
+def view():
+    id = request.args.get('recipe_id', type = int)
+    recipe = Recipe.query.get(id)
+    if not recipe:
+        return redirect('/')
+    else:
+        return render_template('viewrecipe.html', recipe=recipe)
