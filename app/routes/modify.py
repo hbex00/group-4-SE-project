@@ -15,6 +15,6 @@ def modify():
         db.session.commit()
         return redirect('/')
     else:
-        return render_template('viewrecipe.html', recipe=recipe)
+        return render_template('modify.html', recipe=recipe)
     
     
