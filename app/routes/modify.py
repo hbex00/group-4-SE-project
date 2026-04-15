@@ -10,10 +10,6 @@ def modify():
     recipe = Recipe.query.get(id)
     if not recipe:
         return redirect('/')
-    if request.method == 'POST':
-        db.session.delete(recipe)
-        db.session.commit()
-        return redirect('/')
     else:
         return render_template('modify.html', recipe=recipe)
     
