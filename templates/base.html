@@ -60,7 +60,10 @@ Current features are:
                     {% if session.get('username') is not none %}
                         <div class="dropdown_content">
                             <ul>
-                                <li>Profile</li>
+                                <li id="profile_button">
+                                    <form action=/user id="profile" method="GET">
+                                        Profile
+                                    </form>
                                 <li>My Recipes</li>
                                 <li id="logout_button">
                                     <form action="/logout" id="logout" method="GET">
