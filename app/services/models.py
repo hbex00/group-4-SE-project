@@ -14,6 +14,8 @@ class Recipe(db.Model):
     steps = db.relationship('Step', back_populates='recipe')
     user = db.relationship('User', back_populates='recipies')
     comments = db.relationship('Comment', back_populates='recipe')
+    reviews = db.relationship('Review', back_populates='recipe')
+    
 
 
 # Table for User
@@ -25,6 +27,7 @@ class User(db.Model):
 
     recipies = db.relationship('Recipe', back_populates='user')
     comments = db.relationship('Comment', back_populates='user')
+    reviews = db.relationship('Review', back_populates='user')
 
     def set_hashed_password(self, password : str):
         self.password = generate_password_hash(password)
@@ -59,3 +62,13 @@ class Comment(db.Model):
 
     recipe = db.relationship('Recipe', back_populates='comments')
     user = db.relationship('User', back_populates='comments')
+
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reivew = db.Column(db.Integer)
+
+    recipe = db.relationship('Recipe', back_populates='reviews')
+    user = db.relationship('User', back_populates='reviews')
