@@ -71,3 +71,30 @@ def comment_create(recipe_id, content, user_id):
         return comment
     else:
         return None
+    
+def review_add(recipe_id, score, user_id):
+    try:
+        review = review_create(recipe_id, score, user_id)
+
+        if review is not None:
+            db.session.add(review)
+
+        db.session.commit()
+    
+    except:
+        return 'There was an error adding your review'
+
+def review_create(recipe_id, score, user_id):
+    try:
+        sc = round(eval(score))
+    except:
+        return None
+    
+    if sc >= 0 and sc <= 5:
+        new_review = Review(recipe_id=recipe_id,
+                            score=sc,
+                            user_id=user_id)
+        
+        return new_review
+    else:
+        return None
