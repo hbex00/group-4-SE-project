@@ -1,15 +1,5 @@
 {% extends 'flashes.html' %} <!-- Note: The flashes.html further extends into the main base.html!-->
 
-<!-- Macro maybe? -->
-{% macro recipe_list(recipes) %}
-<div class="view_holder">
-    {% for recipe in recipes %}
-    <h3>{{recipes.recipe_title}}</h3>
-    <p>{{recipe.description}}</p>
-    {% endfor %}
-</div>
-{% endmacro %}
-
 {% block head %}
 <!-- Header stuff -->
 
@@ -22,26 +12,35 @@
         <div class="userpage">
             <div class="border">
                 <!-- Check if username cookie is present to see if the user is logged in. -->
-                {% if session.get('username') is not none %}
+                {% if session.get('id') is not none %}
                 <form actions="/user" method="get">
                     <div class="userpage">
                         <h1>Your profile page</h1>
                         <!-- For common curtesy: -->
                          
                         <!-- First name and Last name-->
-                        {% if session.get('name') is not none and session.get('surname') is not none %}
-                        <h2>Welcome back, {{session.get('name')}} {{session.get('surname')}}!</h2>
+                        {% if session.get('first_name') is not none and session.get('last_name') is not none %}
+                        <h2>Welcome back, {{session.get('first_name')}} {{session.get('last_name')}}!</h2>
                         
                         <!-- First name -->
-                        {% elif session.get('name') is not none %}
-                        <h2>Welcome back, {{session.get('name')}}!</h2>
+                        {% elif session.get('first_name') is not none %}
+                        <h2>Welcome back, {{session.get('first_name')}}!</h2>
                         
-                        <!-- No name -> email -->
+                        <!-- No name -> (Should be impossible) -->
                         {% else %}
-                        <h2>Welcome back, {{session.get('username')}}!</h2>
+                        <h2>Welcome back, User?</h2>
                         {% endif %}
 
-                        {{recipe_list}}
+                        {% if ((show_recipes) and (user) and (user.recipies)) %}
+                        <div class="recipe_grid">
+                            {% for recipe in user.recipies %}
+                            <div class="recipe_card">
+                                <h4>{{recipe.recipe_title}}</h4>
+                                <h5> {{recipe.description}}</h5>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 </form>    
                 <form action="/user/edit" method="get">
