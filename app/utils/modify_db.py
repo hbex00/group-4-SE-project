@@ -44,8 +44,11 @@ def steps_add(steps , recipe_id):
         return 'there was an error adding a step'
       
 def create_step(recipe_step, recipe_id):
-    new_step = Step(name=recipe_step,
-                    recipe_id=recipe_id) 
+    if recipe_step.strip() != "" and recipe_id > 0:
+        new_step = Step(name=recipe_step,
+                        recipe_id=recipe_id) 
+    else:
+        return None
     return new_step
 
 def comment_add(recipe_id, content, user_id):
@@ -115,3 +118,4 @@ def review_create(recipe_id, score, user_id):
         return new_review
     else:
         return None
+
