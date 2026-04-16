@@ -12,29 +12,34 @@
         <div class="userpage">
             <div class="border">
                 <!-- Check if username cookie is present to see if the user is logged in. -->
-                {% if session.get('id') is not none %}
+                {% if session.get('id') %}
                 <form actions="/user" method="get">
                     <div class="userpage">
-                        <h1>Your profile page</h1>
-                        <!-- For common curtesy: -->
-                         
-                        <!-- First name and Last name-->
-                        {% if session.get('first_name') is not none and session.get('last_name') is not none %}
-                        <h2>Welcome back, {{session.get('first_name')}} {{session.get('last_name')}}!</h2>
-                        
-                        <!-- First name -->
-                        {% elif session.get('first_name') is not none %}
-                        <h2>Welcome back, {{session.get('first_name')}}!</h2>
-                        
-                        <!-- No name -> (Should be impossible) -->
-                        {% else %}
-                        <h2>Welcome back, User?</h2>
+                        {% if not show_recipes %}
+                            <div class="align_center">
+                                <h1>Your profile page</h1>
+                                <!-- For common curtesy: -->
+                                
+                                <!-- First name and Last name-->
+                                {% if session.get('first_name') is not none and session.get('last_name') is not none %}
+                                <h2>Welcome back, {{session.get('first_name')}} {{session.get('last_name')}}!</h2>
+                                
+                                <!-- First name -->
+                                {% elif session.get('first_name') is not none %}
+                                <h2>Welcome back, {{session.get('first_name')}}!</h2>
+                                
+                                <!-- No name -> (Should be impossible) -->
+                                {% else %}
+                                <h2>Welcome back, User?</h2>
+                                {% endif %}
+                            </div>
                         {% endif %}
 
                         {% if ((show_recipes) and (user) and (user.recipies)) %}
                         <div class="recipe_grid">
                             {% for recipe in user.recipies %}
-                            <div class="recipe_card">
+                            <div class="recipe_card" id="recipe" data-id="{{ recipe.id }}">
+                                <form hidden="True" id="recipe_form" name="recipe_id" method="GET">{{ recipe.id }}</form>
                                 <h4>{{recipe.recipe_title}}</h4>
                                 <h5> {{recipe.description}}</h5>
                             </div>

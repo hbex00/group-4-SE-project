@@ -8,7 +8,7 @@ userpage_bp = Blueprint("userpage", __name__)
 @userpage_bp.route('/user',methods = ['POST','GET'])
 def userpage():
     if request.method == 'POST':
-        return redirect('/') # Nothing Post-able added yet! To the homepage with thee!
+        return redirect('/')
     else:
         try:
             if session.get('id'):
