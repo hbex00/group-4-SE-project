@@ -27,7 +27,6 @@
 #searchbar_body{
     width: 40vw;
     min-width: 540px;
-    height: auto;
     min-height: 80px;
     display: flex;
     justify-content: flex-start;
@@ -87,9 +86,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: auto;
     min-width: 180px;
-    height: auto;
     min-height: 55px;
     gap: 15px;
 }
