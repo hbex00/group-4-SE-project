@@ -91,9 +91,11 @@ https://www.iconpacks.net/free-icon/user-3295.html
 
 ### Run code coverage
 1. to run the code coverage you need pytest and coverage
+
         pip install pytest coverage
 
 2. Run the following comands
+
         $ coverage run -m pytest
         $ coverage html
 
