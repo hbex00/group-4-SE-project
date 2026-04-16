@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, Blueprint, session, flash, get_template_attribute
-from sqlalchemy.orm import joinedload
+from flask import Flask, render_template, request, redirect, Blueprint, session, flash
 from database.db import db
 from app.services.models import User
 from app.services.models import Recipe
@@ -11,25 +10,29 @@ def userpage():
     if request.method == 'POST':
         return redirect('/') # Nothing Post-able added yet! To the homepage with thee!
     else:
-        if 'id' in session:
-            profile_id = session['id']
-            profile_user : User = User.query.filter_by(id=profile_id).first()
-            session['first_name'] = profile_user.name
-            if not profile_user.last_name == "":
-                session['last_name'] = profile_user.last_name
-            else:
-                session.pop('last_name',None)
-
+        try:
+            if session.get('id'):
+                profile_user = User.query.get(session['id'])
+                session['first_name'] = profile_user.name
+                if not profile_user.last_name == "":
+                    session['last_name'] = profile_user.last_name
+                else:
+                    session.pop('last_name',None)
+        except RuntimeError as err:
+            flash(message="Unexpected error: " + str(err) ,category="error")
         return render_template('userpage.html')
     
-
+    
 @userpage_bp.route('/user/edit',methods = ['POST','GET'])
 def edit():
-    flash('Sorry! I have not yet implemented the edit path!',category='error')
-    return render_template('userpage.html')
+    if request.method == 'POST':
+        flash('Sorry! I have not yet implemented the edit path!',category='error')
+    else:
+        flash('Sorry! I have not yet implemented the edit path!',category='error')
+    return redirect('/user')
 
 
-@userpage_bp.route('/user/recipes',methods = ['POST','GET'])
+@userpage_bp.route('/user/recipes', methods = ['POST','GET'])
 def recipes():
     if request.method == 'POST':
         return redirect('/') # Nothing Post-able added yet! To the homepage with thee!
@@ -41,5 +44,5 @@ def recipes():
                 user = User.query.get(session.get('id'))
                 return render_template('userpage.html',user=user,show_recipes=True)
             except AttributeError as err:
-                flash("Attribute Error!>" + str(err),category='error')
-        return render_template('userpage.html')
+                flash("Attribute Error: " + str(err),category='error')
+        return redirect('/user')
