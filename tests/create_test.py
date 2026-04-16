@@ -47,6 +47,14 @@ class Testcreat_recepie(unittest.TestCase):
         self.assertIsNot(result.name, "step 1 eat potato")
         self.assertEqual(result.recipe_id, 2)
 
+    def test_create_empty_step(self):
+        result = create_step("", 1)
+        self.assertIsNone(result)
+
+    def test_create_negative_index(self):
+        result = create_step("test", -1)
+        self.assertIsNone(result)
+
 
 
 if __name__ == '__main__':
