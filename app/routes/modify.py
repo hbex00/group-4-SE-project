@@ -12,9 +12,9 @@ def modify():
     if request.method == 'POST' :
         id = request.form.get('recipe_id', type = int)
         recipe = Recipe.query.get(id)
-        recipe.recipe_name = request.form.get('title') 
-        recipe.description = request.form.get('description')
-        recipe.portions = request.form.get('portions')
+        recipe.recipe_name = request.form['title'] 
+        recipe.description = request.form['description']
+        recipe.portions = request.form['portions']
     # we delete all the lists of ingredents and steps 
         Ingredient.query.filter_by(recipe_id = id).delete()
         Step.query.filter_by(recipe_id = id).delete()

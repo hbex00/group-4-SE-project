@@ -33,7 +33,7 @@
 
         <h1>Made by: {{recipe.user.name}}</h1>
 
-        {% if recipe.user.name == session.get('username') %}
+        {% if recipe.user.id == session.get('id') %}
         <form action="/modify" method="GET">
             <input type="hidden" name="recipe_id" value="{{recipe.id}}">
             <input type="submit" value="Modify recipe">
