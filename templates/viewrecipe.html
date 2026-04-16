@@ -46,8 +46,8 @@
         <h3>Reviews</h3>
         {% if recipe.reviews | length > 0 %}
             {% for review in recipe.reviews %}
-                <p>{{ review.rating }} out of 5</p>
-                <p>Comment made by: {{ review.user.name }}</p>
+                <p>{{ review.rating }} / 5</p>
+                <p>Review made by: {{ review.user.name }}</p>
             {% endfor %}
         {% else %}
             <p>No reviews on this recipe</p>
