@@ -32,8 +32,17 @@ def create_app():
     from .routes.login import login_bp
     app.register_blueprint(login_bp)
 
+<<<<<<< HEAD
     from .routes.user import userpage_bp
     app.register_blueprint(userpage_bp)
+=======
+    from .routes.modify import modify_bp
+    app.register_blueprint(modify_bp)
+
+    from .routes.delete import delete_bp
+    app.register_blueprint(delete_bp)
+
+>>>>>>> ac68701f12964267f268716eb934887423da5437
 
     # Create database
     with app.app_context():
