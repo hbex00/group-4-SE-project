@@ -11,7 +11,11 @@
 
     <div class="view_holder">
         <h1>{{recipe.recipe_title}}</h1>
+      
+        <h5>Rating: {{ recipe.review_rating() }}/5 ({{ recipe.reviews|length}} reviews)</h5>
+      
         <p>Portions: {{recipe.portions}}</p>
+      
         <p>{{recipe.description}}</p>
 
         <h3>Ingredients</h3>
@@ -33,6 +37,26 @@
 
         <h1>Made by: {{recipe.user.name}}</h1>
 
+        <h3>Comments</h3>
+        {% if recipe.comments | length > 0 %}
+            {% for comment in recipe.comments %}
+                <p>{{ comment.content }}</p>
+                <p>Comment made by: {{ comment.user.name }}</p>
+            {% endfor %}
+        {% else %}
+            <p>No comments on this recipe</p>
+        {% endif %}
+
+        <h3>Reviews</h3>
+        {% if recipe.reviews | length > 0 %}
+            {% for review in recipe.reviews %}
+                <p>{{ review.rating }} / 5</p>
+                <p>Review made by: {{ review.user.name }}</p>
+            {% endfor %}
+        {% else %}
+            <p>No reviews on this recipe</p>
+        {% endif %}
+      
         {% if recipe.user.id == session.get('id') %}
         <form action="/modify" method="GET">
             <input type="hidden" name="recipe_id" value="{{recipe.id}}">

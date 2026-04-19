@@ -34,6 +34,12 @@ def create_app():
     from .routes.login import login_bp
     app.register_blueprint(login_bp)
 
+    from .routes.comment import comment_bp
+    app.register_blueprint(comment_bp)
+
+    from .routes.review import review_bp
+    app.register_blueprint(review_bp)
+    
     from .routes.modify import modify_bp
     app.register_blueprint(modify_bp)
 
