@@ -42,8 +42,7 @@ def steps_add(steps , recipe_id):
         db.session.commit()
     except:
         return 'there was an error adding a step'
-
-
+      
 def create_step(recipe_step, recipe_id):
     if recipe_step.strip() != "" and recipe_id > 0:
         new_step = Step(name=recipe_step,
@@ -51,3 +50,72 @@ def create_step(recipe_step, recipe_id):
     else:
         return None
     return new_step
+
+def comment_add(recipe_id, content, user_id):
+    try:
+        created = comment_create(recipe_id, content, user_id)
+
+        if created is not None:
+            recipe_exist = Recipe.query.filter_by(id=recipe_id).first()
+            user_exist = User.query.filter_by(id=user_id).first()
+
+            if recipe_exist is not None and user_exist is not None:
+                db.session.add(created)
+                db.session.commit()
+
+    except:
+        return 'there was an error adding a comment'
+    
+
+def comment_create(recipe_id, content, user_id):
+    if content.strip != "" and recipe_id > 0 and user_id > 0:
+        comment = Comment(recipe_id = recipe_id,
+                          content = content,
+                          user_id = user_id)
+        
+        return comment
+    else:
+        return None
+    
+def review_add(recipe_id, score, user_id):
+    try:
+        review = review_create(recipe_id, score, user_id)
+
+        if review is not None:
+            recipe_exist = Recipe.query.filter_by(id=recipe_id).first()
+            user_exist = User.query.filter_by(id=user_id).first()
+
+            if recipe_exist is not None and user_exist is not None:
+                db.session.add(review)
+
+        db.session.commit()
+    
+    except:
+        return 'There was an error adding your review'
+
+def review_create(recipe_id, score, user_id):
+    try:
+        rating = round(eval(score))
+    except:
+        return None
+    
+    if rating >= 0 and rating <= 5:
+        new_review = Review(recipe_id=recipe_id,
+                            rating=rating,
+                            user_id=user_id)
+        return new_review
+    
+    elif rating > 5:
+        new_review = Review(recipe_id=recipe_id,
+                            rating=5,
+                            user_id=user_id)
+        return new_review
+    
+    elif rating < 0:
+        new_review = Review(recipe_id=recipe_id,
+                            rating=0,
+                            user_id=user_id)
+        return new_review
+    else:
+        return None
+

@@ -14,6 +14,20 @@ class Recipe(db.Model):
     ingredients = db.relationship('Ingredient', back_populates='recipe')
     steps = db.relationship('Step', back_populates='recipe')
     user = db.relationship('User', back_populates='recipies')
+    comments = db.relationship('Comment', back_populates='recipe')
+    reviews = db.relationship('Review', back_populates='recipe')
+
+    def review_rating(self):
+        review_count = len(self.reviews)
+        total_rating = 0
+
+        for review in self.reviews:
+            total_rating += review.rating
+
+        if review_count > 0:
+            return round(total_rating / review_count, 2)
+        else:
+            return 0
 
 
 # Table for User
@@ -25,6 +39,8 @@ class User(db.Model):
     password = db.Column(db.String(256))
 
     recipies = db.relationship('Recipe', back_populates='user')
+    comments = db.relationship('Comment', back_populates='user')
+    reviews = db.relationship('Review', back_populates='user')
 
     def set_hashed_password(self, password : str):
         self.password = generate_password_hash(password)
@@ -49,3 +65,23 @@ class Step(db.Model):
     name = db.Column(db.String(150))
 
     recipe = db.relationship('Recipe', back_populates='steps')
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.String(250))
+
+    recipe = db.relationship('Recipe', back_populates='comments')
+    user = db.relationship('User', back_populates='comments')
+
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    rating = db.Column(db.Integer)
+
+    recipe = db.relationship('Recipe', back_populates='reviews')
+    user = db.relationship('User', back_populates='reviews')
