@@ -31,19 +31,16 @@ def create_app():
 
     from .routes.login import login_bp
     app.register_blueprint(login_bp)
-
-<<<<<<< HEAD
+    
     from .routes.user import userpage_bp
     app.register_blueprint(userpage_bp)
 
-=======
     from .routes.comment import comment_bp
     app.register_blueprint(comment_bp)
 
     from .routes.review import review_bp
     app.register_blueprint(review_bp)
     
->>>>>>> 09c6cc9a2a7c70e4c530afa88e8c213c045369db
     from .routes.modify import modify_bp
     app.register_blueprint(modify_bp)
 
