@@ -38,7 +38,6 @@
                                 <div class="recipe_grid">
                                     {% for recipe in user.recipies %}
                                     <div class="recipe_card" id="recipe" data-id="{{ recipe.id }}">
-                                        <form hidden="True" id="recipe_form" name="recipe_id" method="GET">{{ recipe.id }}</form>
                                         <h4>{{recipe.recipe_title}}</h4>
                                         <h5>{{recipe.description}}</h5>
                                     </div>

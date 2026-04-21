@@ -34,6 +34,16 @@
     margin: 0 auto;
 }
 
+.recipe_card{
+    animation: scaleIn 1s ease-out forwards;
+    background-color: #f4e7cb;
+    padding: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    cursor: pointer;
+}
 
 @keyframes scaleIn {
     0% {
@@ -50,6 +60,8 @@
 .recipe_card:hover{
     animation: select 0.2s ease-in-out forwards;
     animation-iteration-count: 1;
+    background-color: #e7d5b0;
+    
 }
 
 @keyframes select {
@@ -67,17 +79,6 @@
 .recipe_card:not(:hover){
     animation: select 2s ease-in-out backwards;
     animation-iteration-count: 1;
-}
-
-.recipe_card:{
-    animation: scaleIn 1s ease-out forwards;
-    background-color: #f4e7cb;
-    padding: 25px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    cursor: pointer;
 }
 
 .recipe_card h4{
