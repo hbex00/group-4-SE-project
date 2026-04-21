@@ -10,7 +10,7 @@ def app():
         # using a separate database for the tests
         URI='sqlite:///Test.db'
     )
-    app.config.update({"TESTING":False})
+    app.config.update({"TESTING":True})
 
     with app.app_context():
         db.create_all()

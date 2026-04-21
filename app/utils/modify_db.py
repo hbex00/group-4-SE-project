@@ -68,7 +68,7 @@ def comment_add(recipe_id, content, user_id):
     
 
 def comment_create(recipe_id, content, user_id):
-    if content.strip != "" and recipe_id > 0 and user_id > 0:
+    if content.strip() != "" and recipe_id > 0 and user_id > 0:
         comment = Comment(recipe_id = recipe_id,
                           content = content,
                           user_id = user_id)

@@ -63,7 +63,33 @@ class Testcreat_recepie(unittest.TestCase):
         result = create_step("test", -1)
         self.assertIsNone(result)
 
+    def test_create_empty_comment(self):
+        comment = comment_create(1, "", 1)
+        self.assertIsNone(comment)
 
+    def test_create_comment(self):
+        comment = comment_create(1, "What a good recipe", 5)
+        self.assertEqual(comment.recipe_id, 1)
+        self.assertEqual(comment.content, "What a good recipe")
+        self.assertEqual(comment.user_id, 5)
+
+    def test_create_review(self):
+        review = review_create(1, "5", 2)
+        self.assertEqual(review.recipe_id, 1)
+        self.assertEqual(review.rating, 5)
+        self.assertEqual(review.user_id, 2)
+
+    def test_create_negative_review(self):
+        review = review_create(1, "-55", 2)
+        self.assertEqual(review.recipe_id, 1)
+        self.assertEqual(review.rating, 0)
+        self.assertEqual(review.user_id, 2)
+
+    def test_create_above_5_review(self):
+        review = review_create(1, "1000", 2)
+        self.assertEqual(review.recipe_id, 1)
+        self.assertEqual(review.rating, 5)
+        self.assertEqual(review.user_id, 2)
 
 if __name__ == '__main__':
     unittest.main()
