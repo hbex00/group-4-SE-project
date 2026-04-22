@@ -86,11 +86,19 @@ https://icons8.com/icon/7695/search
 
         http://127.0.0.1:5000
 
-## Running through docker
+### Running through docker
 
-1. docker build -t run .
+1. Navigate to the project folder
+2. build the container through this command:
+   
+       docker build -t run .
 
-2. docker run -p 5000:5000 run
+3. To run the container use this command:
+   
+        docker run -p 5000:5000 run
+4. Then navigate to:
+
+        http://localhost:5000
 
 ### Run test file
 1. Run the following comand
