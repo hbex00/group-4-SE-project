@@ -91,12 +91,13 @@ https://icons8.com/icon/7695/search
 1. Navigate to the project folder
 2. build the container through this command:
    
-       docker build -t run .
+       $ docker build -t run .
 
 3. To run the container use this command:
    
-        docker run -p 5000:5000 run
-4. Then navigate to:
+       $ docker run -p 5000:5000 run
+   
+5. Then navigate to:
 
         http://localhost:5000
 
