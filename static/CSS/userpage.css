@@ -76,11 +76,6 @@
 	}
 }
 
-.recipe_card:not(:hover){
-    animation: select 2s ease-in-out backwards;
-    animation-iteration-count: 1;
-}
-
 .recipe_card h4{
     color: #1B6D24;
     margin-top: 0;
