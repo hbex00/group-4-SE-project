@@ -86,6 +86,12 @@ https://icons8.com/icon/7695/search
 
         http://127.0.0.1:5000
 
+## Running through docker
+
+1. docker build -t run .
+
+2. docker run -p 5000:5000 run
+
 ### Run test file
 1. Run the following comand
 
