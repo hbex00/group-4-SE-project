@@ -21,7 +21,6 @@ def login():
             password = request.form['password']
 
             user = User.query.filter_by(email=email).first()
-            print("look here -> " + str(user))
             if user:
                 if user.check_hashed_password(password):
                     session['id'] = user.id
