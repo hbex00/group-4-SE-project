@@ -39,8 +39,31 @@ def check_user(page : str, flash_message : bool):
         else:
             raise RuntimeError("ID-token Error")
         
+def user_input_acceptance(args :dict):
+    if args['first_name']:
+        if len(args['first_name'].strip()) > 40:
+            return False
+    if args['last_name']:
+        if len(args['last_name'].strip()) > 40:
+            return False
+    if args['password1']:
+        if len(args['password1']) > 40:
+            return False
+    if args['password2']:
+        if len(args['password2']) > 40:
+            return False
+    if args['email_address']:
+        if len(args['email_address'].strip()) > 60:
+            return False
+        if check_if_email_exist(args['email_address']):
+            return False
+    return True
 
-        
+def check_if_email_exist(email_address :str):
+    if User.query.filter_by(email=email_address.lower()).first():
+        return True
+    return False
+    
 def update_user(args :dict, page :str, flashes :bool, url_path :str):
     if not url_path:
         url_path = '/'
@@ -50,12 +73,29 @@ def update_user(args :dict, page :str, flashes :bool, url_path :str):
         flashes = False
 
     user = check_user(page,flashes)
+    if not user_input_acceptance(args):
+        if flashes:
+            flash(message="Input not accepted!",category="info")
+        if page == 'userpage.html':
+            return render_template(page,user=user,edit=True)
+        elif page:
+            return render_template(page)
+        raise RuntimeError("Size Error")
     
     first_name    = args['first_name']      .strip()
     last_name     = args['last_name']       .strip()
     email_address = args['email_address']   .strip()
     password1     = args['password1']
     password2     = args['password2']
+
+    if first_name:
+        first_name = first_name.lower()
+        first_name = first_name[:1].upper() + first_name[1:]
+    if last_name:    
+        last_name = last_name.lower()
+        last_name = last_name[:1].upper() + last_name[1:]
+    if email_address:
+        email_address = email_address.lower()
 
     if not (password1 == password2):
         if flashes:
