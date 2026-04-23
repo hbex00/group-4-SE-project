@@ -20,7 +20,6 @@ jobs:
 
     - run: docker build -t therecipebox .
     - run: docker save therecipebox -o therecipebox.tar
-    - run: zip therecipebox-image.zip therecipebox.tar
     - uses: actions/upload-artifact@v4
       with: 
         name: therecipebox_:${GITHUB_REF_NAME}
