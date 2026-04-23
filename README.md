@@ -102,15 +102,19 @@ https://icons8.com/icon/7695/search
         http://localhost:5000
 
 ### Run test file
-1. Run the following comand
+1. To run the tests you will need pytest
+   
+        $ pip install pytest
+   
+4. Run the following comand
 
-        (windows): $ py -m unittest tests.create_test
-        (linux):   $ python -m unittest tests.create_test
+        (windows): $ pytest
+        (linux):   $ pytest
 
 ### Run code coverage
 1. to run the code coverage you need pytest and coverage
 
-        pip install pytest coverage
+        $ pip install pytest coverage
 
 2. Run the following comands
 
