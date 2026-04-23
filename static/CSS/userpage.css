@@ -91,6 +91,9 @@
     line-height: 1.5;
 }
 
+.recipe_card:hover {
+    cursor: pointer;;
+}
 .edit_userpage {
     display: flex;
     align-items: center;
