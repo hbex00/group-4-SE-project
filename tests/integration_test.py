@@ -160,8 +160,8 @@ def test_comment_route_errors(client):
     error_no_session_id = client.post("/comment", data = {  "recipe_id": "1",
                                                 "comment": "Good recipe!"}, follow_redirects=True)
     
-    with client:
-        assert error_no_session_id.request.path == '/login'
+    assert error_no_session_id.status_code == 200
+    assert error_no_session_id.request.path == '/login' 
 
     with client.session_transaction() as session:
         session['id'] = 1
@@ -169,14 +169,21 @@ def test_comment_route_errors(client):
     error_no_recipe_id = client.post("/comment", data = {  "recipe_id": "",
                                                 "comment": "Not to my taste"}, follow_redirects=True)
     
-    with client:
-        assert error_no_recipe_id.data == b'invalid recipe ID'
+    assert error_no_recipe_id.status_code == 200 
+    assert error_no_recipe_id.data == b'invalid recipe ID'
 
     error_not_found_id = client.post("/comment", data = {  "recipe_id": "1",
                                                 "comment": "Hello from sweden"}, follow_redirects=True)
     
-    with client:
-        assert error_not_found_id.data == b'Recipe with this ID not found'
+    assert error_not_found_id.status_code == 200
+    assert error_not_found_id.data == b'Recipe with this ID not found'
+
+def test_comment_get(client):
+    with client.session_transaction() as session:
+        session['id'] = 1
+
+    response = client.get("/comment")
+    assert response.status_code == 200
         
 def test_logout_user(client):
     email = "lars.larsson@larsson.se"
@@ -202,4 +209,3 @@ def test_logout_user(client):
     assert result2.status_code == 200
     assert result2.request.path == '/'
     
-   
