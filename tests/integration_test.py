@@ -212,7 +212,7 @@ def test_edit_user(client):
 
         new_email = "Eriksson@student.ju.se"
         new_second_email = "Eriksson2@student.ju.se"
-        wrong_email = "Erikssonson"
+        wrong_email = "Erikssonson@nodot"
         new_password = "Abc"
         wrong_password = "abc"
         new_name = "erik"

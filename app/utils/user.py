@@ -11,7 +11,7 @@ def check_user(page : str, flash_message : bool):
 
     if session.get('id'):
         try:
-            profile_user = User.query.get(session['id'])
+            profile_user = db.session.get(User,(session.get('id')))
             if not type(profile_user) == User:
                 if flash_message:
                     flash("Your account was not found.",category='error')
