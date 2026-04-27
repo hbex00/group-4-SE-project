@@ -125,11 +125,12 @@ def tag_add(recipe_id, tag_id):
         tag_exist = Tag.query.filter_by(id=tag_id).first()
 
         if recipe_exist is not None and tag_exist is not None:
-            rt = recipetag_create(recipe_id, tag_id)
+            rt = recipetag_create(recipe_id, int(tag_id))
 
             if rt is not None:
                 db.session.add(rt)
-                db.session.commit()
+            
+            db.session.commit()
         
     except:
         return 'There was an error adding a tag to your recipe'

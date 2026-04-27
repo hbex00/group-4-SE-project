@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, Blueprint, session
 from database.db import db
 from app.services.models import *
 from app.utils.modify_db import *
+from app.utils.tag import *
 
 
 create_bp = Blueprint("create", __name__)
@@ -26,6 +27,8 @@ def create():
 
         recipe_steps = request.form.getlist('step[]')
 
+        tag = request.form['tag']
+
         id = session.get('id')
         recipe_creator = User.query.filter_by(id=id).first()
 
@@ -45,6 +48,8 @@ def create():
         ingredients_add(ingredients, new_recipe.id)
 
         steps_add(recipe_steps, new_recipe.id )
+
+        tag_add(new_recipe.id, tag)
 
         return redirect('/')
     else:
