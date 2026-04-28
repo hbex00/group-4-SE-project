@@ -53,9 +53,10 @@ def create():
 
         return redirect('/')
     else:
-        categories = Tag.query.with_entities(Tag.category).distinct().count()
+        categories = Tag.query.with_entities(Tag.category).distinct()
+        tags = Tag.query.all()
 
-        return render_template('addrecipe.html', cat_count = categories)
+        return render_template('addrecipe.html', cats = categories, tags2d = tags)
       
 
 

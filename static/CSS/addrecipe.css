@@ -55,4 +55,5 @@
 .tag_select {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }

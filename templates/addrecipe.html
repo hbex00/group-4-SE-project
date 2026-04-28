@@ -25,7 +25,16 @@
 
             <div class="tag_select">
                 <h2>Tags:</h2>
-
+                {% for cat in cats %}
+                    {{cat.category}}
+                    {% for tag in tags2d %}
+                        {% if tag.category == cat.category %}
+                            {{tag.unit}}
+                        {% endif %}
+                    {% endfor %}
+                    <br>
+                {% endfor %}
+                
             </div>
 
             <div class="description">
