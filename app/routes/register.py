@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Blueprint
+from flask import Flask, render_template, request, redirect, Blueprint, session
 from database.db import db
 from app.services.models import *
 
@@ -14,6 +14,10 @@ def register():
         password2 = request.form['password2']
         try:
             register_user_database(first_name, last_name, mail, password1, password2)
+            #after a new user is registerd we put them in the sessin before returning to 
+            user = User.query.filter_by(email=mail).first()
+            session['id'] = user.id
+            session['first_name'] = user.name
             return redirect('/') # Temporary, needs change. Future enhancement.
         except RuntimeError as err:
             return "Error: " + str(err)
