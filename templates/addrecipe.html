@@ -27,7 +27,8 @@
                 <h2>Tags:</h2>
                 {% for cat in cats %}
                     <div class="dropdown">
-                        <input type="button" value="{{cat.category}}" placeholder="{{cat.category}}" name="tag[]">
+                        <input type="button" value="{{cat.category}}" placeholder="{{cat.category}}">
+                        <input type="hidden" value="{{cat.category}}" placeholder="{{cat.category}}" name="tag[]">
                         <div class="tag_content">
                             <ul>
                             {% for tag in tags2d %}

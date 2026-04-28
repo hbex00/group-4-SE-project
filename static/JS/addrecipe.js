@@ -105,7 +105,9 @@ tag_cat_list.forEach(btn => {
     // On click changing the input to the li item clicked 
     cat_specific_table.forEach(li_element => {
         li_element.addEventListener("click", () => {
-            btn.querySelector("input").value = btn.querySelector("input").placeholder + ": " +li_element.innerText;
+            const string = btn.querySelector("input").placeholder + ": " +li_element.innerText;
+            btn.querySelector("input").value = string;
+            btn.querySelector('input[type="hidden"]').value = string;
         });
     });
 });
