@@ -128,6 +128,7 @@
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     text-align: left;
+    transition: all 0.3s ease;
 }
 
 .recipe_card h4{
@@ -151,5 +152,7 @@
 }
 
 .recipe_card:hover {
-    cursor: pointer;;
+    cursor: pointer;
+    transform:translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
