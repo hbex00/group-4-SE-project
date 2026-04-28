@@ -32,6 +32,7 @@
                                     {% endif %}
                                 </div>
                             {% elif ((show_recipes) and (user) and (user.recipies)) %}
+                            <h2>Your recipies</h2>
                             <div class="recipe_grid">
                                 {% for recipe in user.recipies %}
                                 <div class="recipe_card" data-id="{{ recipe.id }}">
@@ -43,6 +44,34 @@
                                 </div>
                                 {% endfor %}
                             </div>
+
+                            <h2>Your reviews</h2>
+                            <div class="recipe_grid">
+                                {% for review in user.reviews %}
+                                <div class="recipe_card" data-id="{{ review.recipe.id }}">
+                                    <form action="/viewrecipe" method="GET">
+                                        <h4>Rating: {{review.rating}}</h4>
+                                        <h5>Made on recipe: {{review.recipe.recipe_title}}</h5>
+                                        <input type="hidden" name="recipe_id" value="{{review.recipe.id}}">
+                                    </form>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <h2>Your comments</h2>
+                            <div class="recipe_grid">
+                                {% for comment in user.comments %}
+                                <div class="recipe_card" data-id="{{ comment.recipe.id }}">
+                                    <form action="/viewrecipe" method="GET">
+                                        <h4>Comment: {{comment.content}}</h4>
+                                        <h5>Made on recipe: {{comment.recipe.recipe_title}}</h5>
+                                        <input type="hidden" name="recipe_id" value="{{comment.recipe.id}}">
+                                    </form>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            
                             {% endif %}
                         </div>
                         {% if not show_recipes %}
