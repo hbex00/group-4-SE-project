@@ -39,7 +39,9 @@
                             <form action="/viewrecipe" method="GET">
                                 <h4>{{recipe.id}}.  {{recipe.recipe_title}}</h4>
                                 <div class="tag_form">
-                                    <h6>{% for tag in recipe.tags %} {{tag.tag.unit}} {% endfor %}</h6>
+                                    {% for tag in recipe.tags %}
+                                        <h6> {{tag.tag.unit}} </h6>
+                                    {% endfor %}
                                 </div>
                                 <h5> {{recipe.description}}</h5>
                                 <input type="hidden" name="recipe_id" value="{{recipe.id}}">
@@ -49,20 +51,6 @@
                 </div>
             {% else %}
                 <p style="text-align: center; margin-top: 40px;">No recipes found.</p>
-            {% endif %}
-            {% if tags|length > 0 %}
-                <div class="recipe_grid">
-                    {% for tag in tags %}
-                        <div class="recipe_card">
-                            <form action="/viewrecipe" method="GET">
-                                <h4>{{tag.id}}. Category: {{tag.category}}</h4>
-                                <h5> Unit: {{tag.unit}}</h5>
-                            </form>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p style="text-align: center; margin-top: 40px;">No tags found.</p>
             {% endif %}
         </div>
     </div>
