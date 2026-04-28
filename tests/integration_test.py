@@ -63,6 +63,7 @@ def test_login_user(client):
                                      "email": test_user.email,
                                      "password1": test_user.password,
                                      "password2": test_user.password}, follow_redirects=True)
+    client.post("/logout")
     with client:
         error_test = client.post("/login", data = {"email": test_user.email,
                                                     "password": "wrong"}, follow_redirects=True)
@@ -202,6 +203,7 @@ def test_edit_user(client):
     assert register_response.status_code == 200
     assert register_response.request.path == '/' 
     
+    client.post("/logout", follow_redirects=True)
     with client:
         client.post("/login", data = {"email": email.lower(),
                                       "password": password}, follow_redirects=True)

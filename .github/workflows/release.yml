@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v3
@@ -20,7 +23,16 @@ jobs:
 
     - run: docker build -t therecipebox .
     - run: docker save therecipebox -o therecipebox.tar
+
+    - name: Zip docker image
+      run: zip therecipebox-image.zip therecipebox.tar
+
     - uses: actions/upload-artifact@v4
       with: 
-        name: therecipebox_:${GITHUB_REF_NAME}
+        name: therecipebox-${{ github.ref_name }}
         path: therecipebox-image.zip
+
+    - uses: softprops/action-gh-release@v2
+      with:
+        name: therecipebox-${{ github.ref_name }}
+        files: therecipebox-image.zip
