@@ -17,7 +17,7 @@ def login():
     
     else:
         try:
-            email = request.form['email']
+            email = request.form['email'].lower()
             password = request.form['password']
 
             user = User.query.filter_by(email=email).first()
