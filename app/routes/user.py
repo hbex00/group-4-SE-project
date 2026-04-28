@@ -48,6 +48,6 @@ def user_recipes():
             return user
         
         if not user.recipies and not user.reviews and not user.comments:
-            flash("It appears that you have no recipes yet.",category='info')
+            flash("It appears that you have no actions yet.",category='info')
             return render_template(page)
         return render_template(page,user=user,show_recipes=True)
