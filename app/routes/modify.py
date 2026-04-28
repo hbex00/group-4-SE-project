@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, Blueprint
 from database.db import db
 from app.services.models import *
 from app.utils.modify_db import *
+from app.utils.tag import *
 
 modify_bp = Blueprint("modify", __name__)
 
@@ -36,5 +37,8 @@ def modify():
     
     id = request.args.get('recipe_id', type = int)
     recipe = Recipe.query.get(id)
-        
-    return render_template('modify.html', recipe=recipe)
+
+    categories = Tag.query.with_entities(Tag.category).distinct()
+    tags = Tag.query.all()
+    
+    return render_template('modify.html', recipe=recipe, cats = categories, tags2d = tags)
