@@ -157,3 +157,12 @@
     transform:translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
+
+.tag_form h6 {
+    display: inline;
+    margin: 3px;
+    color: var(--base-green);
+    border: solid black 1px;
+    border-radius: 15px;
+    padding: 2px;
+}
