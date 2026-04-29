@@ -162,3 +162,26 @@ def update_user(args :dict, page :str, flashes :bool, url_path :str):
         db.session.commit()
     
     return redirect(url_path)
+
+def reset_password(email :str, name :str, new_password :str):
+    if email == None or email == "":
+        return "Error no email"
+    if name == None or name == "":
+        return "Error no name"
+    if new_password == None or new_password == "":
+        return "Error no email"
+    try:
+        user = db.session.get(User, session.select(User).where(User.email==email))
+        if not user == User:
+            return "User not found"
+        new_user = user
+        new_user.password = new_password
+        db.session.delete(user)
+        db.session.add(new_user)
+    except:
+        return "reee"
+    else:
+        db.session.commit()
+        session['id'] = new_user.id
+        session['first_name'] = new_user.name
+    return '/'
