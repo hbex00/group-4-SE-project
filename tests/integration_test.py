@@ -336,3 +336,27 @@ def test_visit_add_recipe(client):
     result = client.get("/create", follow_redirects=True)
     assert result.status_code == 200
     assert result.request.path == '/create'
+
+    email = "Gunnar@student.ju.se"
+    password = "123"
+    register_response = client.post("/register", data = {"f_name": "gunnar",
+                                     "l_name":"",
+                                     "email": email,
+                                     "password1": password,
+                                     "password2": password}, follow_redirects=True)
+    
+    assert register_response.status_code == 200
+    assert register_response.request.path == '/' 
+
+    result = client.post("/create", data = {'title' : "meatballs",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"]},
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
