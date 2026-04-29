@@ -314,3 +314,49 @@ def test_expected_content(client):
     assert b"value=\"Share Recipe\"" in response.data
     assert b"value=\"Review Recipe\"" in response.data
     assert b"value=\"Comment Recipe\"" in response.data
+
+
+def test_visit_add_recipe(client):
+    # not logged in yet
+    result = client.get("/create")
+
+    # we expect redirect to /login and redirect status aka 302
+    assert result.status_code == 302
+
+    # check redirect location and response
+    result = client.get("/create", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/login'
+
+
+    # log in to the site and check if we arrive
+    with client.session_transaction() as session:
+        session['id'] = 1
+    
+    result = client.get("/create", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/create'
+
+    email = "Gunnar@student.ju.se"
+    password = "123"
+    register_response = client.post("/register", data = {"f_name": "gunnar",
+                                     "l_name":"",
+                                     "email": email,
+                                     "password1": password,
+                                     "password2": password}, follow_redirects=True)
+    
+    assert register_response.status_code == 200
+    assert register_response.request.path == '/' 
+
+    result = client.post("/create", data = {'title' : "meatballs",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"]},
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
