@@ -50,9 +50,6 @@ def user_edit():
                 UPLOAD_FOLDER = os.path.join(current_app.static_folder, "Bilder", "profile_pics")
                 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
                 file.save(os.path.join(UPLOAD_FOLDER, unique_name))
-                print(os.path.join(UPLOAD_FOLDER, unique_name))
-                print(os.path.exists(os.path.join(UPLOAD_FOLDER, unique_name)))
-
                 user.profile_image = unique_name
 
         action = update_user(request.form.to_dict(),page,flashes,path)
