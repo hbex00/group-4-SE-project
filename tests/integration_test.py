@@ -355,6 +355,9 @@ def post_example_recipe(client,author=None,recipe=None):
     assert register_response.status_code == 200
     assert register_response.request.path == '/'
 
+    # Log out from current user
+    response = client.post("/logout")
+
     # Return last (this) Recipe entry
     example_recipes = list_recipes()
     return example_recipes[len(example_recipes)-1]
@@ -408,6 +411,7 @@ def test_search(client):
     response = client.post( "/search", data = {"pattern":example_user.name},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
+    print(response.get_data(as_text=True))
     assert example_user_name not in response.data
     if example_user.last_name and example_user.last_name != "":
         assert example_user_last_name not in response.data
