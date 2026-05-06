@@ -70,6 +70,38 @@
     background-color: transparent;
 }
 
+.filter_dropdown {
+    position: relative;
+}
+
+.filter_toggle {
+    padding: 6px 10px;
+    font-size: 14px;
+    background-color: #d1c7ae;
+    border: 1px solid #f4e7cb3a;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.filter_menu {
+    position:absolute;
+    top:auto;
+    left: 0;
+    background-color: #e6d9bf;
+    border: 1px solid #f4e7cb3a;
+    border-radius: 4px;
+    padding: 10px;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.filter_menu label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
 #searchbar:focus{
     outline: none;
 }
