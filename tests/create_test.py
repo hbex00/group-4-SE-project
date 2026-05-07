@@ -2,17 +2,18 @@ import unittest
 from app.routes.create import *
 from app.routes.register import register_user
 from app.utils.modify_db import *
+from app.utils.helper_function import allowed_file
 
 class Testcreat_recepie(unittest.TestCase):
 
     def test_create_one_recepie(self):
-        result = create_recepie("Köttbullar","goda kötbullar", 1, 2, "no")
+        result = create_recepie("Köttbullar","goda kötbullar",1, 2,'',"no")
         self.assertEqual(result.recipe_title,"Köttbullar")
         self.assertEqual(result.description,"goda kötbullar")
         self.assertEqual(result.user_id, 2)
 
     def test_create_two_recepies(self):
-        result = create_recepie("Hamburgare","goda Hamburgare", 1, 3, "yes")
+        result = create_recepie("Hamburgare","goda Hamburgare",1, 3,'',"yes")
         self.assertEqual(result.recipe_title,"Hamburgare")
         self.assertEqual(result.description,"goda Hamburgare")
         self.assertEqual(result.user_id, 3)
@@ -99,6 +100,14 @@ class Testcreat_recepie(unittest.TestCase):
     def test_recipetag_incorrect(self):
         recipetag = recipetag_create(0,1)
         self.assertIsNone(recipetag)
+
+    def test_allowed_files(self):
+        allowed = allowed_file("correct.jpg")
+        self.assertEqual(allowed,True)
+
+    def test_not_allowed_files(self):
+        not_allowed = allowed_file("wrong.rar")
+        self.assertEqual(not_allowed,False)
 
 if __name__ == '__main__':
     unittest.main()
