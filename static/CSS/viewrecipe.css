@@ -102,4 +102,8 @@ p {
 .test{
     width: 50%;
     align-self: flex-start;
+.btn_row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
