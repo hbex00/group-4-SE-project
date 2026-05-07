@@ -18,7 +18,11 @@ def modify():
     if request.method == 'POST' :
         id = request.form.get('recipe_id', type = int)
         recipe = Recipe.query.get(id)
-        recipe.recipe_title = request.form['title'] 
+        try:
+            if request.form['title'].strip() != "":
+                recipe.recipe_title = request.form['title'] 
+        except:
+            recipe.recipe_title = recipe.recipe_title
         recipe.description = request.form['description']
         recipe.portions = request.form['portions']
         recipe.private = True if 'private' in request.form else False
