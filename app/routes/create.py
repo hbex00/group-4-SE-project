@@ -53,6 +53,8 @@ def create():
             new_recipe = create_recepie(recipe_name, recipe_description, recipe_portions, recipe_creator.id,recipe_image)
             db.session.add(new_recipe)
             db.session.commit()
+        except RuntimeError as err:
+            return "Error: " + str(err)
         except:
             return 'there was an error adding the recipe'
         
@@ -83,6 +85,8 @@ def create():
 
 
 def create_recepie(name, description, portions, user_id, recipe_image):
+        if name.strip() == "":
+            raise RuntimeError('Empty Name')
         recipe = Recipe(
             recipe_title=name,
             recipe_image= recipe_image,
