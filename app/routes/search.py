@@ -4,10 +4,30 @@ from app.services.models import User,Recipe
 
 search_bp = Blueprint("searchpage", __name__)
 
-#Page variables
-page = 'searchpage.html'
-path = '/search'
-flashes = True
+#Page Constants
+PAGE = 'searchpage.html'
+PATH = '/search'
+FLASHES = True
+FILTERS = {
+    "Recipes": {
+        "Time":[
+            "15 minutes",
+            "30 minutes",
+            "45 minutes",
+            "1 hour",
+            "2 hours"],
+        "Complexity":[
+            "Easy",
+            "Medium",
+            "Hard",
+            "GR"],
+        "Spice":[
+            "1",
+            "2",
+            "3"]
+        },
+    "Users":{}
+}
 
 @search_bp.route('/search',methods = ['POST','GET'])
 def searchpage():
@@ -19,6 +39,7 @@ def searchpage():
             has_any_filter    = has_filter_user | has_filter_recipe
 
             if pattern:
+                request.args.getlist
                 result_users = list()
                 result_recipes = list()
 
@@ -30,19 +51,19 @@ def searchpage():
                     result_recipes.extend(text_search_table(pattern,Recipe))
                     has_filter = True
                 
-                return render_template(page,
+                return render_template(PAGE,
                                     search_recipes=(not has_any_filter)|has_filter_recipe,
                                     search_users=has_filter_user,
                                     result_users=result_users,
                                     result_recipes=result_recipes)
             else:
-                return render_template(page,
+                return render_template(PAGE,
                                     search_recipes=(not has_any_filter)|has_filter_recipe,
                                     search_users=has_filter_user)
             
         except Exception as error: return error
     else:
-        return render_template(page)
+        return render_template(PAGE,filters=FILTERS)
     
 def getArgument(arguments: dict, value: str):
     if hasArgument(arg=arguments,val=value):

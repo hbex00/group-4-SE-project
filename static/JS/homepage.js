@@ -12,6 +12,31 @@ document.addEventListener('click', (e) => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const type_checkboxes = document.querySelectorAll(".type_checkbox");
+
+    function update_filters() {
+        type_checkboxes.forEach(checkbox => {
+            const target_ID = checkbox.dataset.target;
+            const target = document.getElementById(target_ID);
+
+            if (!target){
+                return;
+            }
+            if (checkbox.checked) {
+                target.style.display = "flex";
+            }
+            else{
+                target.style.display = "none";
+            }
+        });
+    }
+    type_checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change",update_filters)
+    })
+    update_filters();
+})
+
 recipe_card_list.forEach(div => {
     div.addEventListener("click", () => {
         div.querySelector("form").submit();
