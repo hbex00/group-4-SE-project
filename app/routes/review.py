@@ -26,8 +26,14 @@ def review():
         id = session.get('id')
         user = User.query.filter_by(id=id).first()
 
+        review_exists = db.session.query(Review).filter_by(user_id=user.id).first()
+
         review_add(recipe_id, review, user.id)
 
+        if review_exists is not None:
+            db.session.delete(review_exists)
+            db.session.commit()
+        
         return redirect('/')
     else:
         

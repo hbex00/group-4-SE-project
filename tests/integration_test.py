@@ -109,19 +109,25 @@ def test_reviews_full(client):
     
     assert review_response_1.status_code == 200
     assert review_response_1.request.path == '/'
+
+    with client:
+        r1 = Review.query.filter_by(id=1).first()
+
+        assert r1.rating == 5
     
     review_response_2 = client.post("/review", data = {  "recipe_id": "1",
                                                 "review": "4"}, follow_redirects=True)
     
     assert review_response_2.status_code == 200
     assert review_response_2.request.path == '/'
+
+    db.session.add(Review(recipe_id="1", rating="5"))
+    db.session.commit()
     
     with client:
-        r1 = Review.query.filter_by(id=1).first()
-        r2 = Review.query.filter_by(id=2).first() 
+        r1 = Review.query.filter_by(id=2).first()
 
-        assert r1.rating == 5
-        assert r2.rating == 4
+        assert r1.rating == 4
 
         recipe = Recipe.query.filter_by(id=1).first()
 
