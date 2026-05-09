@@ -839,8 +839,79 @@ def test_deleting_recipe(client):
     result = client.post("/delete", data = {'recipe_id' : 1}, follow_redirects = True)
     assert result.status_code == 200
     assert result.request.path == '/'
-    
-    
+
+
+def test_get_modify_page(client):
+    create_user(client)
+
+    # request on non existing recipe
+    result = client.get("/modify", data={'recipe_id' : 1}, follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+    recipe = {  'title' : "Test title",
+                'description' : "A description",
+                'portions' : 2,
+                'ingredients[]' : ["meat","balls"],
+                'amount[]' : [2,3],
+                'unit[]' : ["st","st"],
+                'step[]' : ["step1","step2"],
+                'tag[]' : ["Time: 15", "Complexity: GR"],
+                'private' : "no"}
+    re_result = client.post("/create", data=recipe, follow_redirects=True)
+    assert re_result.status_code == 200
+    assert result.request.path == '/'
+
+    # Get real recipe
+    result = client.get("/modify?recipe_id=1", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/modify'
+
+
+
+def test_modify_recipe(client):
+    Original_title = "Test title"
+    recipe = {  'title' : Original_title,
+                'description' : "A description",
+                'portions' : 2,
+                'ingredients[]' : ["meat","balls"],
+                'amount[]' : [2,3],
+                'unit[]' : ["st","st"],
+                'step[]' : ["step1","step2"],
+                'tag[]' : ["Time: 15", "Complexity: GR"],
+                'private' : "no"}
+    create_modify_base(client, recipe)
+
+    # check so the base recipe was added
+    with client:
+        check_recipe = Recipe.query.filter_by(id=1).first()
+        assert check_recipe.recipe_title == recipe['title']
+
+    # Change nothing (add id to post)
+    recipe['recipe_id'] = 1
+    result = client.post("/modify", data = recipe, follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+    # Remove title
+    recipe["title"] = ""
+    result = client.post("/modify", data = recipe, follow_redirects=True)
+
+    # Should be the same as the old one
+    with client:
+        check_recipe = Recipe.query.filter_by(id=1).first()
+        assert check_recipe.recipe_title == Original_title
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
+def create_modify_base(used_client, recipe):
+    Create_Tags()
+    create_user(used_client)
+    result = used_client.post("/create", data = recipe,
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
 
 
 def create_user(used_client):
