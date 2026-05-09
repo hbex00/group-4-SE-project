@@ -810,6 +810,39 @@ def test_faulty_tags(client):
     assert result.status_code == 200
     assert result.request.path == '/' 
 
+def test_deleting_recipe(client):
+    create_user(client)
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 min", "Complexity: GR hard"]},
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+    # delete
+    with client:
+        recipe = Recipe.query.filter_by(id=1).first()
+        assert recipe.recipe_title == "a good title"
+    result = client.post("/delete", data = {'recipe_id' : 1}, follow_redirects = True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+    with client:
+        recipe = Recipe.query.filter_by(id=1).first()
+        assert recipe == None
+
+    # delete non existing recipe
+    result = client.post("/delete", data = {'recipe_id' : 1}, follow_redirects = True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+    
+    
+
+
 def create_user(used_client):
     with used_client.session_transaction() as session:
         session['id'] = 1
