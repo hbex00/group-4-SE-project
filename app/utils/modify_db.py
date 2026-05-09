@@ -60,6 +60,14 @@ def comment_add(recipe_id, content, user_id):
             user_exist = User.query.filter_by(id=user_id).first()
 
             if recipe_exist is not None and user_exist is not None:
+
+                try:
+                    review_exist = db.session.query(Review).filter(Review.user_id == user_exist.id).first()
+                    created.user_review_id = review_exist.id
+
+                except:
+                    pass
+                    
                 db.session.add(created)
                 db.session.commit()
 
