@@ -746,3 +746,79 @@ def test_comment_edit_page_get(client):
     db.session.commit()
     response = client.get("/edit-comment?comment_id=1", follow_redirects=True)
     assert response.status_code == 200
+
+def test_recipe_with_empty_name(client):
+    create_user(client)
+    
+    result = client.post("/create", data = {'title' : "",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"]},
+                                              follow_redirects=True)
+    # if we succed we go to the hompage
+    # but we should fail and go back to create
+    assert result.status_code == 200
+    assert result.request.path == '/create'    
+
+
+def test_adding_tags(client):
+    create_user(client)
+    Create_Tags()
+
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 minutes", "Complexity: GR"]},
+                                              follow_redirects=True)
+    
+    with client:
+        recipe = Recipe.query.first()
+        tags = [recipe_tag.tag.unit for recipe_tag in recipe.tags]
+        assert len(tags) == 2
+        assert "15 minutes" in tags
+        assert "GR" in tags
+    
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+def test_faulty_tags(client):
+    create_user(client)
+    Create_Tags()
+
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 min", "Complexity: GR hard"]},
+                                              follow_redirects=True)
+    
+    with client:
+        recipe = Recipe.query.first()
+        tags = [recipe_tag.tag.unit for recipe_tag in recipe.tags]
+        assert len(tags) == 0
+    
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+def create_user(used_client):
+    with used_client.session_transaction() as session:
+        session['id'] = 1
+    test_user = User(name = 'Björk',
+                    last_name = 'Lukasson',
+                    email = 'cba@321.com',
+                    password = 'Bj123',
+                    profile_image = 'defualt.svg'
+                    )
+
+    db.session.add(test_user)
+    db.session.commit()
