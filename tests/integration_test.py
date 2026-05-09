@@ -125,12 +125,12 @@ def test_reviews_full(client):
     db.session.commit()
     
     with client:
-        r1 = Review.query.filter_by(id=2).first()
-
+        r1 = Review.query.filter_by(id=1).first()
         assert r1.rating == 4
+        r2 = Review.query.filter_by(id=2).first()
+        assert r2.rating == 5
 
         recipe = Recipe.query.filter_by(id=1).first()
-
         assert recipe.review_rating() == 4.5
 
 def test_comment_route(client):

@@ -28,11 +28,22 @@ def review():
 
         review_exists = db.session.query(Review).filter_by(user_id=user.id).first()
 
-        review_add(recipe_id, review, user.id)
-
-        if review_exists is not None:
-            db.session.delete(review_exists)
+        if review_exists:
+            try:
+                rating = round(float(review))
+                if rating >= 0 and rating <= 5:
+                    review_exists.rating = rating
+                elif rating > 5:
+                    review_exists.rating = 5
+                else:
+                    review_exists.rating = 0
+            except:
+                return redirect('/')
+            
             db.session.commit()
+
+        else:
+            review_add(recipe_id, review, user.id)
         
         return redirect('/')
     else:
