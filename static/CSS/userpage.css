@@ -161,6 +161,49 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
+    margin-top: 10px;
+}
+
+#edit_action{
+    width: fit-content;
+    margin: auto;
+    background-color: #2E7D32;
+    color: white;
+    padding: 5px 15px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#edit_action:hover{
+    background-color: #48ac4d;
+    border-color: white;
+}
+
+#edit_action:active{
+    background-color: #2E7D32;
+}
+
+#delete_action{
+    width: fit-content;
+    margin: auto;
+    background-color: #961313;
+    color: white;
+    padding: 5px 15px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#delete_action:hover{
+    background-color: #ea2626;
+    border-color: white;
+}
+
+#delete_action:active{
+    background-color: #961313;
 }
 
 #edit_details_form{

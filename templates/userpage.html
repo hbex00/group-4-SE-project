@@ -60,11 +60,11 @@
                                             <div class="btn_row">
                                                 <form action="/edit-review" method="GET">
                                                     <input type="hidden" name="review_id" value="{{review.id}}">
-                                                    <input type="submit" value="Edit review">
+                                                    <input type="submit" id="edit_action" value="Edit review">
                                                 </form>
                                                 <form action="/delete-review" method="POST">
                                                     <input type="hidden" name="review_id" value="{{review.id}}">
-                                                    <input type="submit" value="DELETE REVIEW">
+                                                    <input type="submit" id="delete_action" value="DELETE REVIEW">
                                                 </form>
                                             </div>
                                         </div>
@@ -85,11 +85,11 @@
                                             <div class="btn_row">
                                                 <form action="/edit-comment" method="GET">
                                                     <input type="hidden" name="comment_id" value="{{comment.id}}">
-                                                    <input type="submit" value="Edit comment">
+                                                    <input type="submit" id="edit_action" value="Edit comment">
                                                 </form>
                                                 <form action="/delete-comment" method="POST">
                                                     <input type="hidden" name="comment_id" value="{{comment.id}}">
-                                                    <input type="submit" value="DELETE COMMENT">
+                                                    <input type="submit" id="delete_action" value="DELETE COMMENT">
                                                 </form>
                                             </div>
                                         </div>
