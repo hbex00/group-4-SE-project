@@ -42,7 +42,7 @@
                                     {% for option in options %}
                                     <label>
                                         <input  type="checkbox"
-                                                name="filter_{{tag}}"
+                                                name="{{type_name}}_{{tag}}"
                                                 value="{{option}}">{{option}}
                                     </label>
                                     {% endfor %}
