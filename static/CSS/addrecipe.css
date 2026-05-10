@@ -1,45 +1,93 @@
-
 .whole_input_page {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
-
+    padding-top: 50px;
 }
 
-.title_container {
+/*.whole_input_page::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    opacity: 0.5;
+    background-image: url(../Bilder/BackgroundNormal.png);
+    background-size: cover;
+    background-position: center;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+}*/
+
+#main_form{
+    width: 20%;
+    min-width: 350px;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff5e1;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
 }
 
-.ingredient {
-    display: flex;
-    flex-direction: column;
+.tag_select h2{
+    margin-right: 10px;
 }
 
-.step {
-    display: flex;
-    flex-direction: column;
-}
- 
 .portion_control {
     display: flex;
     flex-direction: row;
 }
 
 .portion_control p {
-    margin: 0;
-    margin-right: 10px;
-    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    width: 20px;
+    margin: 0 10px;
     padding: 5px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    background-color: #2E7D32;
+    border: solid rgba(0, 0, 0, 0.3) 2px;
+    border-radius: 50%;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-    border: solid black 2px;
-    border-radius: 20px;
+.portion_control p:hover{
+    background-color: #48ac4d;
+}
+
+#portions{
+    width: 40px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+#portions::-webkit-outer-spin-button, #portions::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.ingredient, .step{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .ingredient_div {
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .ingredient_div p {
@@ -47,12 +95,51 @@
     border: solid black 1px;
 }
 
+.input_name{
+    width: 60%;
+}
+
+.input_amount{
+    width: 20%;
+}
+
+.input_unit{
+    width: 20%;
+}
+
 .new_step {
     display: flex;
     flex-direction: row;
 }
 
+.input_step{
+    width: 100%;
+}
+
 .private {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+}
+
+#submit_recipe{
+    width: fit-content;
+    margin: auto;
+    background-color: #2E7D32;
+    color: white;
+    padding: 5px 15px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#submit_recipe:hover{
+    background-color: #48ac4d;
+    border-color: white;
+}
+
+#submit_recipe:active{
+    background-color: #2E7D32;
 }
