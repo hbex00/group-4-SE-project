@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, Blueprint, session, flash
 from app.utils.search_db import text_search_table
-from app.services.models import User,Recipe
+from app.services.models import User,Recipe,Tag
+from collections import defaultdict
+from database.db import db
+from sqlalchemy import select
 
 search_bp = Blueprint("searchpage", __name__)
 
@@ -8,26 +11,26 @@ search_bp = Blueprint("searchpage", __name__)
 PAGE = 'searchpage.html'
 PATH = '/search'
 FLASHES = True
-FILTERS = {
-    "Recipe": { # Class name, case sensitive
-        "Time":[
-            "15 minutes",
-            "30 minutes",
-            "45 minutes",
-            "1 hour",
-            "2 hours"],
-        "Complexity":[
-            "Easy",
-            "Medium",
-            "Hard",
-            "GR"],
-        "Spice":[
-            "1",
-            "2",
-            "3"]
-        },
-    "User":{}
-}
+FILTERS = None
+SEARCH_TYPES = Recipe.__name__, User.__name__
+
+# loads existing tags
+def build_tag_filters():
+    filters = defaultdict(list)
+    tags = db.session.execute(select(Tag.category, Tag.unit).distinct().order_by(Tag.category,Tag.unit)).all()
+
+    for tag_category,tag_unit in tags:
+        filters[tag_category].append(tag_unit)
+    
+    return dict(filters)
+
+# Gets or gets and builds filters
+# (By subsequently removing the filters, next get will update it.)
+def get_tag_filters():
+    global FILTERS
+    if FILTERS is None:
+        FILTERS = build_tag_filters()
+    return FILTERS
 
 @search_bp.route('/search',methods = ['POST','GET'])
 def searchpage():
@@ -47,29 +50,22 @@ def searchpage():
 
             results = {}
             for search_class in request.form.getlist("types"):
-                filterclass = f"{str(search_class)}_%"
-                replace_string = f"{str(search_class)}_"
-                print(str(filterclass))
-                print(str(request.form.lists()))
                 class_tags = {}
-                
-                for tag_type, tag_content in request.form.lists():
-                    if replace_string in tag_type:
-                        print("entered: "+str(tag_type))
-                        tag_name = tag_type.replace(replace_string,"")
-                        tag_list = {tag_name:tag_content}
-                        class_tags.update(tag_list)
-                print(str(class_tags))
+                for tag_data in request.form.lists():
+                    print(str(tag_data))
+                    tag_category, tag_unit = tag_data
+                    if "." in tag_category:
+                        tag_category = (tag_category.split("."))[0]
+                        class_tags.update({tag_category:tag_unit})
 
+                print(str(class_tags))
                 if class_tags:
-                    print("CLASS TAGS::>>")
-                    class_search_results = {search_class:text_search_table(pattern,search_class,class_tags)}
+                    class_search_results = {search_class:text_search_table(pattern,get_model_from_string(search_class),class_tags)}
                 
                 else:
-                    print("NO!! CLASS TAGS::>>")
-                    class_search_results = {search_class:text_search_table(pattern,search_class)}
+                    class_search_results = {search_class:text_search_table(pattern,get_model_from_string(search_class))}
                 
-                results.update(class_search_results)
+                results.update({search_class:class_search_results})
                 
             '''if pattern:
                 result_users = list()
@@ -96,8 +92,10 @@ def searchpage():
                                 search_users=has_filter_user)
             
         except Exception as error: return error
+        except AttributeError as error: return error
+        except TypeError as error: return error
     else:
-        return render_template(PAGE,filters=FILTERS)
+        return render_template(PAGE,filters=get_tag_filters(),search_types=SEARCH_TYPES)
     
 def getArgument(arguments: dict, value: str):
     if hasArgument(arg=arguments,val=value):
@@ -112,3 +110,21 @@ def hasArgument(arg: dict, val):
     if type(arg.get(val)) == str and arg.get(val) == "":
         return False
     return True
+
+def get_model_from_string(string):
+    if not string:
+        raise ValueError("Missing string input!")
+    
+    if not isinstance(string, str):
+        raise TypeError(f"Expected str! Got: " + str(type(string)))
+    
+    try: 
+        for mapper in Recipe.registry.mappers:
+            model_class = mapper.class_
+            if model_class.__name__ == string:
+                return model_class
+            
+    except Exception as error:
+        print(error)
+
+    raise ValueError("No class matches found!")

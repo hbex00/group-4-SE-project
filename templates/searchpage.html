@@ -14,45 +14,49 @@
             <input type="search" id="searchbar" name="pattern" placeholder="Search for..." autocomplete="on">
             {% if filters %}
             <div class="filter_dropdown">
+                
                 <button type="button" class="filter_toggle">Filters</button>
+                
                 <div class="filter_menu">
+                    {% if search_types%}
                     <div class="filter_header">
-                        <span>Search Type | Tags</span>
+                        <span>Search Types</span>
                     </div>
+                
                     <!--Should pick up tuples from filter.items, making it dynamic for backend to decide content-->
-                    {% for type_name, category in filters.items() %}
+                    {% for type_name in search_types %}
                     <div class="filter_row">
-                        <div class="filter_type">
-                            <label>
-                                <input  type="checkbox"
-                                        name="types"
-                                        value="{{type_name}}"
-                                        class="type_checkbox"
-                                        data-target="tags_{{loop.index}}"> {{type_name}}
-                            </label>
-                        </div>
-                        <div class="filter_groups" id="tags_{{loop.index}}">
-                            {% if category %}
-                            {% for tag, options in category.items() %}
-                            <div class="filter_group">
-                                <div class="group_title">
-                                     {{tag}}
-                                </div>
-                                <div class="group_options">
-                                    {% for option in options %}
-                                    <label>
-                                        <input  type="checkbox"
-                                                name="{{type_name}}_{{tag}}"
-                                                value="{{option}}">{{option}}
-                                    </label>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
+                        <label>
+                            <input  type="checkbox"
+                                    name="types"
+                                    value="{{type_name}}"
+                                    class="type_checkbox"> {{type_name}}<!--data-target="tags_{{type_name}}"-->
+                        </label>
                     </div>
                     {% endfor %}
+                    {% endif %}
+                    <div class="filter_header"><span>Tags</span></div>
+
+                    <div class="filter_groups"> <!--id="tags_{{type_name}}">-->
+                        {% for tag, options in filters.items() %}
+                        <div class="filter_group">
+
+                            <div class="group_title">
+                                    {{tag}}
+                            </div>
+                            
+                            <div class="group_options">
+                                {% for option in options %}
+                                <label>
+                                    <input  type="checkbox"
+                                            name="{{tag}}.{{option}}"
+                                            value="{{option}}">{{option}}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                     <!--
                     <label><input type="checkbox" name="filter_recipe">Recipes</label>
                     <label><input type="checkbox" name="filter_user">Users</label>

@@ -5,23 +5,23 @@ from sqlalchemy.inspection import inspect
 from app.services.models import Tag
 from database.db import db
 
-
-def text_search_table(pattern,orm_class,class_tags=None):
+def text_search_table(pattern,orm_class,class_tags: dict=None):
+    print("CALLING TEXT_SEARCH_TABLE FUNCTION!!!!")
     if not pattern:
         pattern = ""
-    
+     
     if not orm_class:
         raise ValueError("Empty class")
     
     if not isinstance(orm_class, DeclarativeMeta):
         raise TypeError("orm_class must be a SQLAlchemy model")
 
-    search_pattern  
     if pattern == "":
         search_pattern = f"%"
     else:
         search_pattern = f"%{pattern}%"  
 
+    print("PASSED INITIAL ERROR CHECKS!!!!!!")
     table_text_columns = []
     for column in orm_class.__table__.columns:
         if isinstance(column.type, (String,Text)):
@@ -33,7 +33,7 @@ def text_search_table(pattern,orm_class,class_tags=None):
     matching_table_query = select(orm_class).where(or_(*column_match_conditions))
 
     if class_tags:
-        class_category, class_units = class_tags
+        print("CLASS TAGS ENTERED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         orm_class_tag: DeclarativeMeta = None
         mapper = inspect(orm_class)
 
@@ -45,20 +45,26 @@ def text_search_table(pattern,orm_class,class_tags=None):
 
         if orm_class_tag is None:
             raise ValueError("No tags found for " + str(orm_class))
-
-        # essentially a query/function to explore in-depth and return foreign keys in an SQL Orm class
+            #Are you sure that you are looking for an object with tags in its relationship..?
+        
+        # The following is essentially a function/query to explore in-depth and return foreign keys in an SQL Orm class
         parent_foreign_key = next(column
                                   for column in orm_class_tag.__table__.columns
                                     if column.foreign_keys and any(
                                         fk.column.table == orm_class.__table__
                                         for fk in column.foreign_keys))
         
+        # Form the query to include its respective tags (i.e. RecipeTag)
         matching_table_query = (matching_table_query
                                 .join(orm_class_tag, parent_foreign_key==orm_class.id)
-                                .join(Tag,Tag.id == orm_class_tag.tag_id)
-                                .where(Tag.category == class_category,Tag.unit.in_(class_units))
-                                .group_by(orm_class.id)
-                                .distinct())
+                                .join(Tag,Tag.id == orm_class_tag.tag_id))
+        
+        # For each tag provided in class_tags we update the table query to only return results with matching tag categories and units.
+        for tag_category,tag_units in class_tags.items():
+            matching_table_query = matching_table_query.where(Tag.category == tag_category,Tag.unit.in_(tag_units))
+
+        # The Query will return the matching sets and base it on their class id. Only distinct results are returned.
+        matching_table_query = matching_table_query.group_by(orm_class.id).distinct()
 
     try:
         return db.session.execute(matching_table_query).scalars().all()
