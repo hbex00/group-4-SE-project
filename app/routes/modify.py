@@ -17,7 +17,7 @@ def modify():
     # when geting input from user we change all the inputs for a recipe in the database
     if request.method == 'POST' :
         id = request.form.get('recipe_id', type = int)
-        recipe = Recipe.query.get(id)
+        recipe = Recipe.query.filter_by(id=id).first()
         try:
             if request.form['title'].strip() != "":
                 recipe.recipe_title = request.form['title'] 
