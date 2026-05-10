@@ -104,31 +104,59 @@ def test_reviews_full(client):
     db.session.add(test_recipe)
     db.session.commit
     
+    #Add a review within valid range (0 < rating > 5)
     review_response_1 = client.post("/review", data = {  "recipe_id": "1",
-                                                "review": "5"}, follow_redirects=True)
+                                                "review": "3"}, follow_redirects=True)
     
     assert review_response_1.status_code == 200
     assert review_response_1.request.path == '/'
 
     with client:
-        r1 = Review.query.filter_by(id=1).first()
-
-        assert r1.rating == 5
+        review = Review.query.filter_by(id=1).first()
+        assert review.rating == 3
     
+    #User add new review which updates existed reviews rating
     review_response_2 = client.post("/review", data = {  "recipe_id": "1",
-                                                "review": "4"}, follow_redirects=True)
+                                                "review": "2"}, follow_redirects=True)
     
     assert review_response_2.status_code == 200
     assert review_response_2.request.path == '/'
 
-    db.session.add(Review(recipe_id="1", rating="5"))
+    with client:
+        review = Review.query.filter_by(id=1).first()
+        assert review.rating == 2
+
+    #Add review below valid range (rating < 0)
+    review_response_3 = client.post("/review", data = {  "recipe_id": "1",
+                                                "review": "-555"}, follow_redirects=True)
+    
+    assert review_response_3.status_code == 200
+    assert review_response_3.request.path == '/'
+
+    with client:
+        review = Review.query.filter_by(id=1).first()
+        assert review.rating == 0
+    
+    #Add review above valid range (rating > 5)
+    review_response_4 = client.post("/review", data = {  "recipe_id": "1",
+                                                "review": "100"}, follow_redirects=True)
+    
+    assert review_response_4.status_code == 200
+    assert review_response_4.request.path == '/'
+
+    with client:
+        review = Review.query.filter_by(id=1).first()
+        assert review.rating == 5
+
+    db.session.add(Review(recipe_id="1", rating="4"))
     db.session.commit()
     
     with client:
-        r1 = Review.query.filter_by(id=1).first()
-        assert r1.rating == 4
-        r2 = Review.query.filter_by(id=2).first()
-        assert r2.rating == 5
+        review_1 = Review.query.filter_by(id=1).first()
+        assert review_1.rating == 5
+        review_2 = Review.query.filter_by(id=2).first()
+        assert review_2.rating == 4
+
 
         recipe = Recipe.query.filter_by(id=1).first()
         assert recipe.review_rating() == 4.5
