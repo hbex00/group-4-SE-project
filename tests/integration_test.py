@@ -571,6 +571,50 @@ def test_expected_content(client):
     assert b"value=\"Comment Recipe\"" in response.data
 
 
+def test_visit_add_recipe(client):
+    # not logged in yet
+    result = client.get("/create")
+
+    # we expect redirect to /login and redirect status aka 302
+    assert result.status_code == 302
+
+    # check redirect location and response
+    result = client.get("/create", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/login'
+
+
+    # log in to the site and check if we arrive
+    with client.session_transaction() as session:
+        session['id'] = 1
+    
+    result = client.get("/create", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/create'
+
+    email = "Gunnar@student.ju.se"
+    password = "123"
+    register_response = client.post("/register", data = {"f_name": "gunnar",
+                                     "l_name":"",
+                                     "email": email,
+                                     "password1": password,
+                                     "password2": password}, follow_redirects=True)
+    
+    assert register_response.status_code == 200
+    assert register_response.request.path == '/' 
+
+    result = client.post("/create", data = {'title' : "meatballs",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"]},
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
 def test_create_tags(client):
     Create_Tags()
 
@@ -795,3 +839,184 @@ def test_review_comment_connection(client):
 
         assert comment.user_review_id == review.id
         assert len(review.user_comments) == 2
+        
+        
+def test_recipe_with_empty_name(client):
+    create_user(client)
+    
+    result = client.post("/create", data = {'title' : "",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"]},
+                                              follow_redirects=True)
+    # if we succed we go to the hompage
+    # but we should fail and go back to create
+    assert result.status_code == 200
+    assert result.request.path == '/create'    
+
+
+def test_adding_tags(client):
+    create_user(client)
+    Create_Tags()
+
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 minutes", "Complexity: GR"]},
+                                              follow_redirects=True)
+    
+    with client:
+        recipe = Recipe.query.first()
+        tags = [recipe_tag.tag.unit for recipe_tag in recipe.tags]
+        assert len(tags) == 2
+        assert "15 minutes" in tags
+        assert "GR" in tags
+    
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+def test_faulty_tags(client):
+    create_user(client)
+    Create_Tags()
+
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 min", "Complexity: GR hard"]},
+                                              follow_redirects=True)
+    
+    with client:
+        recipe = Recipe.query.first()
+        tags = [recipe_tag.tag.unit for recipe_tag in recipe.tags]
+        assert len(tags) == 0
+    
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+def test_deleting_recipe(client):
+    create_user(client)
+    result = client.post("/create", data = {'title' : "a good title",
+                                            'description' : "good",
+                                            'portions' : 2,
+                                            'ingredients[]' : ["meat","balls"],
+                                            'amount[]' : [2,3],
+                                            'unit[]' : ["st","st"],
+                                            'step[]' : ["step1","step2"],
+                                            'tag[]' : ["Time: 15 min", "Complexity: GR hard"]},
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/' 
+
+    # delete
+    with client:
+        recipe = Recipe.query.filter_by(id=1).first()
+        assert recipe.recipe_title == "a good title"
+    result = client.post("/delete", data = {'recipe_id' : 1}, follow_redirects = True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+    with client:
+        recipe = Recipe.query.filter_by(id=1).first()
+        assert recipe == None
+
+    # delete non existing recipe
+    result = client.post("/delete", data = {'recipe_id' : 1}, follow_redirects = True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
+def test_get_modify_page(client):
+    create_user(client)
+
+    # request on non existing recipe
+    result = client.get("/modify", data={'recipe_id' : 1}, follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+    recipe = {  'title' : "Test title",
+                'description' : "A description",
+                'portions' : 2,
+                'ingredients[]' : ["meat","balls"],
+                'amount[]' : [2,3],
+                'unit[]' : ["st","st"],
+                'step[]' : ["step1","step2"],
+                'tag[]' : ["Time: 15", "Complexity: GR"],
+                'private' : "no"}
+    re_result = client.post("/create", data=recipe, follow_redirects=True)
+    assert re_result.status_code == 200
+    assert result.request.path == '/'
+
+    # Get real recipe
+    result = client.get("/modify?recipe_id=1", follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/modify'
+
+
+
+def test_modify_recipe(client):
+    Original_title = "Test title"
+    recipe = {  'title' : Original_title,
+                'description' : "A description",
+                'portions' : 2,
+                'ingredients[]' : ["meat","balls"],
+                'amount[]' : [2,3],
+                'unit[]' : ["st","st"],
+                'step[]' : ["step1","step2"],
+                'tag[]' : ["Time: 15", "Complexity: GR"],
+                'private' : "no"}
+    create_modify_base(client, recipe)
+
+    # check so the base recipe was added
+    with client:
+        check_recipe = Recipe.query.filter_by(id=1).first()
+        assert check_recipe.recipe_title == recipe['title']
+
+    # Change nothing (add id to post)
+    recipe['recipe_id'] = 1
+    result = client.post("/modify", data = recipe, follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+    # Remove title
+    recipe["title"] = ""
+    result = client.post("/modify", data = recipe, follow_redirects=True)
+
+    # Should be the same as the old one
+    with client:
+        check_recipe = Recipe.query.filter_by(id=1).first()
+        assert check_recipe.recipe_title == Original_title
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
+def create_modify_base(used_client, recipe):
+    Create_Tags()
+    create_user(used_client)
+    result = used_client.post("/create", data = recipe,
+                                              follow_redirects=True)
+    assert result.status_code == 200
+    assert result.request.path == '/'
+
+
+def create_user(used_client):
+    with used_client.session_transaction() as session:
+        session['id'] = 1
+    test_user = User(name = 'Björk',
+                    last_name = 'Lukasson',
+                    email = 'cba@321.com',
+                    password = 'Bj123',
+                    profile_image = 'defualt.svg'
+                    )
+
+    db.session.add(test_user)
+    db.session.commit()
