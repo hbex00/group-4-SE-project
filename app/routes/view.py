@@ -22,6 +22,7 @@ def viewuser():
         try:
             id = request.args.get('user_id', type = int)
             user = db.session.get(User,id)
-            return render_template('viewuser.html',user = user,recipes = user.recipies, show_recipes=True)
+            recipe = Recipe.query.filter(and_(Recipe.private == False, Recipe.user_id == user.id)).all()
+            return render_template('viewuser.html',user = user,recipes = recipe, show_recipes=True)
         except:
            return redirect("/")
