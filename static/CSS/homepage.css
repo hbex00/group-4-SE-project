@@ -6,7 +6,6 @@
     align-items: center;
     height: 50vh;
     gap: 20px;
-    
 }
 
 .top_elements::before{
@@ -17,11 +16,11 @@
     right: 0;
     bottom: 0;
     z-index: -1;
-    opacity: 0.6;
-    background-image: url(../Bilder/Website_Greens_Graphic.jpg);
-    background-size: auto;
+    opacity: 0.7;
+    background-image: url(../Bilder/BackgroundNormal.png);
+    background-size: cover;
     background-position: center;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 65%, rgba(0, 0, 0, 0) 100%);
 }
 
 #searchbar_body{
@@ -35,7 +34,7 @@
     background-color: #f4e7cb;
     border-radius: 50px;
     padding: 0px 10px;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3)
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
 }
 
 #magnifying_glass_big{
@@ -97,9 +96,10 @@
 }
 
 #searchbar_submit{
-    width: 15%;
+    width: 12%;
     min-width: 110px;
     height: 70%;
+    padding: 0 10px;
     border-radius: 50px;
     border: 1px solid transparent;
     background-color: #1B6D24;
@@ -133,9 +133,10 @@
 #recipe_function_button{
     background-color: #1B6D24;
     color: white;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 500;
     border: 1px solid transparent;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     border-radius: 50px;
     width: 100%;
     height: 100%;

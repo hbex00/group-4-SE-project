@@ -33,7 +33,7 @@
                                 </div>
                             {% elif ((show_recipes) and (user)) %}
                                 {% if user.recipies %}
-                                    <h2>Your recipies</h2>
+                                    <h2 class="action_titles">Your recipies</h2>
                                     <div class="recipe_grid">
                                         {% for recipe in user.recipies %}
                                         <div class="recipe_card" data-id="{{ recipe.id }}">
@@ -48,7 +48,7 @@
                                 {% endif %}
                                 
                                 {% if user.reviews %}
-                                    <h2>Your reviews</h2>
+                                    <h2 class="action_titles">Your reviews</h2>
                                     <div class="recipe_grid">
                                         {% for review in user.reviews %}
                                         <div class="recipe_card" data-id="{{ review.recipe.id }}">
@@ -60,11 +60,11 @@
                                             <div class="btn_row">
                                                 <form action="/edit-review" method="GET">
                                                     <input type="hidden" name="review_id" value="{{review.id}}">
-                                                    <input type="submit" value="Edit review">
+                                                    <input type="submit" id="edit_action" value="Edit review">
                                                 </form>
                                                 <form action="/delete-review" method="POST">
                                                     <input type="hidden" name="review_id" value="{{review.id}}">
-                                                    <input type="submit" value="DELETE REVIEW">
+                                                    <input type="submit" id="delete_action" value="DELETE REVIEW">
                                                 </form>
                                             </div>
                                         </div>
@@ -73,7 +73,7 @@
                                 {% endif %}
                                 
                                 {% if user.comments %}
-                                    <h2>Your comments</h2>
+                                    <h2 class="action_titles">Your comments</h2>
                                     <div class="recipe_grid">
                                         {% for comment in user.comments %}
                                         <div class="recipe_card" data-id="{{ comment.recipe.id }}">
@@ -85,11 +85,11 @@
                                             <div class="btn_row">
                                                 <form action="/edit-comment" method="GET">
                                                     <input type="hidden" name="comment_id" value="{{comment.id}}">
-                                                    <input type="submit" value="Edit comment">
+                                                    <input type="submit" id="edit_action" value="Edit comment">
                                                 </form>
                                                 <form action="/delete-comment" method="POST">
                                                     <input type="hidden" name="comment_id" value="{{comment.id}}">
-                                                    <input type="submit" value="DELETE COMMENT">
+                                                    <input type="submit" id="delete_action" value="DELETE COMMENT">
                                                 </form>
                                             </div>
                                         </div>
@@ -103,8 +103,8 @@
                         <!-- Looks a little clunky down here,
                         but when put into the section with profile user it kinda
                         messes with the form already present (action="/user"). -->
-                        <form action="/user/edit" method="GET">
-                            <input type="submit" value="Edit Profile Details">
+                        <form action="/user/edit" id="edit_details_form" method="GET">
+                            <input type="submit" id="edit_details" value="Edit Profile Details">
                         </form>
                         {% endif %}
                     {% else %}
