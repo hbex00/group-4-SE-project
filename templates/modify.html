@@ -10,16 +10,14 @@
 
 {% block main_body %}
 
-    <div class="modify_holder">
-        <form action="/modify" method="POST" enctype=multipart/form-data>
-            <div class="title_change">
-                <h1>Title:</h1>
-                <input type="text" name="title" id="title" value="{{recipe.recipe_title}}" size="20"></h1>
-            </div>
-             <div class="recipe_image">
-                <h2>modify a image to your recipe</h2>
-                <input type=file name=file>
-            </div>
+    <div class="whole_input_page">
+        <form action="/modify" method="POST" enctype=multipart/form-data id="main_form">
+
+            <h2>Title</h2>
+            <input type="text" name="title" id="title" value="{{recipe.recipe_title}}" size="20">
+            
+            <h2>Image</h2>
+            <input type=file name=file>
 
             <div class="tag_select">
                 <h2>Tags:</h2>
@@ -43,48 +41,50 @@
                         </div>
                     </div>
                 {% endfor %}
-                
             </div>
 
+            <h2>Description</h2>
+            <input type="text" value="{{recipe.description}}" size="50" name="description">
+
+            <h3>Portions</h3>
             <div class="portion_control" style="-webkit-user-select: none; user-select: none;">
-                <h3>Portions: </h3>
                 <p id="minus">&minus;</p>
                     <input type="number" name="portions" placeholder="Portions" id="portions" min="1" max="16" value="{{recipe.portions}}">
                 <p id="plus">&plus;</p>
             </div>
 
-            <div class="description">
-                <h3>Description: </h3>
-                <input type="text" value="{{recipe.description}}" size="50" name="description">
+            <div class="ingredient">
+                <h2>Ingredients</h2>
+                <input type="button" placeholder="Add ingredient" id="add_ingr_btn" value="Add ingredient">
+                <div id="ingredient_location">
+                    {%if recipe.ingredients|length > 0%}
+                        {%for ingredient in recipe.ingredients%}
+                            <div class="ingredient_div" id="ingredient_div">
+                                <input type="text" value="{{ingredient.name}}" placeholder="Ingredient" name="ingredients[]" class="input_name">
+                                <input type="text" value="{{ingredient.amount}}" placeholder="Amount" name="amount[]" class="input_amount">
+                                <input type="text" value="{{ingredient.unit}}" placeholder="Unit" name="unit[]" class="input_unit">
+                                <p class="minus_ingredient">&minus;</p>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                </div>
             </div>
 
-            <h3>Ingredients</h3>
-            <div id="ingredient_location">
-                {%if recipe.ingredients|length > 0%}
-                    {%for ingredient in recipe.ingredients%}
-                        <div class="ingredient_div" id="ingredient_div">
-                            <input type="text" value="{{ingredient.name}}" size="50" placeholder="Ingredient" name="ingredients[]">
-                            <input type="text" value="{{ingredient.amount}}" size="5" placeholder="Amount" name="amount[]">
-                            <input type="text" value="{{ingredient.unit}}" size="10" placeholder="Unit" name="unit[]">
-                            <p class="minus_ingredient">&minus;</p>
-                        </div>
-                    {%endfor%}
-                {%endif%}
+            <div class="step">
+                <h2>Steps</h2>
+                <input type="button" id="add_step_btn" placeholder="Add step" value="Add step">
+                <div id="step_location">
+                    {%if recipe.steps|length > 0%}
+                        {%for step in recipe.steps%}
+                            <div class="steps">
+                                <input type="text" name="step[]" value="{{step.name}}" class="input_step">
+                                <p class="minus_step">&minus;</p>
+                            </div>
+                        {%endfor%}
+                    {%endif%}
+                </div>
             </div>
-            <p id="add_ingr_btn">Add ingredient</p>
 
-            <h3>Instructions</h3>
-            <div id="step_location">
-                {%if recipe.steps|length > 0%}
-                    {%for step in recipe.steps%}
-                        <div class="steps">
-                            <input type="text" name="step[]" value="{{step.name}}">
-                            <p class="minus_step">&minus;</p>
-                        </div>
-                    {%endfor%}
-                {%endif%}
-            </div>
-            <p id="add_step_btn">Add step</p>
             <div class="private">
                 {% if recipe.private == True %}
                     <input type="checkbox" placeholder="Private" value="yes" name="private" checked >
@@ -93,17 +93,19 @@
                 {% endif %}
                 <p>Private</p>
             </div>
-            <input type="hidden" name="recipe_id" value="{{recipe.id}}">
-            <input type="submit" value="Submit">
+
+
+            <div class="submit_delete">
+                <input type="hidden" name="recipe_id" value="{{recipe.id}}">
+                <input type="submit" id="submit_recipe" value="Submit">
+
+                {% if recipe.user.id == session.get('id') %}
+                <input type="submit" id="delete_recipe" value="DELETE RECIPE" formaction="/delete" formmethod="POST">
+                {% endif %}
+            </div>
         </form>
 
-        {% if recipe.user.id == session.get('id') %}
-        <form action="/delete" method="POST">
-            <input type="hidden" name="recipe_id" value="{{recipe.id}}">
-            <input type="submit" value="DELETE RECIPE">
-        </form>
-        {% endif %}
-
+        
         <script src="../static/JS/modify.js"></script>
         <script src="../static/JS/tags.js"></script>
     </div>
