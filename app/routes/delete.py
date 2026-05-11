@@ -8,11 +8,12 @@ delete_bp = Blueprint("delete", __name__)
 def delete():
     id = request.form.get('recipe_id', type = int)
     recipe = Recipe.query.filter_by(id=id).first()
-
-    if session.get('id') != recipe.user:
-        return redirect('/')
-
+    
     if recipe != None:
+        if session.get('id') != recipe.user_id:
+            return redirect('/')
+
+    
         if request.method == 'POST':
             db.session.delete(recipe)
             db.session.commit()
