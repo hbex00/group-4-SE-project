@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Blueprint, session
+from flask import Flask, render_template, request, redirect, Blueprint, session, flash
 from database.db import db
 from app.services.models import *
 from sqlalchemy import and_, or_
@@ -13,3 +13,15 @@ def view():
         return redirect('/')
     else:
         return render_template('viewrecipe.html', recipe=recipe)
+
+@view_bp.route('/viewuser', methods=['POST', 'GET'])
+def viewuser(): 
+    if request.method == 'POST':
+        return redirect('/') # Nothing Post-able added yet! To the homepage with thee!
+    else:
+        try:
+            id = request.args.get('user_id', type = int)
+            user = db.session.get(User,id)
+            return render_template('viewuser.html',user = user,recipes = user.recipies, show_recipes=True)
+        except:
+           return redirect("/")

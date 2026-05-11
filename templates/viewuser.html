@@ -1,0 +1,77 @@
+{% extends 'flashes.html' %}
+
+{% block head %}
+    <title>User Profile</title>
+    <link rel="stylesheet" href="../static/CSS/viewuser.css">
+{% endblock %}
+
+{% block main_body %}
+<div class="userpage">
+    <div class="border">
+
+        {% if user %}
+
+            <div class="align_center">
+                <h1>{{ user.name }}{% if user.last_name %} {{ user.last_name }}{% endif %}'s Profile</h1>
+            </div>
+
+            {% if show_recipes %}
+
+                {% if recipes %}
+                    <h2>Recipes</h2>
+                    <div class="recipe_grid">
+                        {% for recipe in recipes %}
+                        <div class="recipe_card" data-id="{{ recipe.id }}">
+                            <form action='/viewrecipe' method="GET">
+                                <h4>{{ recipe.recipe_title }}</h4>
+                                <h5>{{ recipe.description }}</h5>
+                                <input type="hidden" name="recipe_id" value="{{ recipe.id }}">
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if user.reviews %}
+                    <h2>Reviews</h2>
+                    <div class="recipe_grid">
+                        {% for review in user.reviews %}
+                        <div class="recipe_card" data-id="{{ review.recipe.id }}">
+                            <h4>Rating: {{ review.rating }}</h4>
+                            <h5>On recipe: {{ review.recipe.recipe_title }}</h5>
+                            <form action='/viewrecipe' method="GET">
+                                <input type="hidden" name="recipe_id" value="{{ review.recipe.id }}">
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if user.comments %}
+                    <h2>Comments</h2>
+                    <div class="recipe_grid">
+                        {% for comment in user.comments %}
+                        <div class="recipe_card" data-id="{{ comment.recipe.id }}">
+                            <h4>On recipe: {{ comment.recipe.recipe_title }}</h4>
+                            <h5>{{ comment.content }}</h5>
+                            <form action='/viewrecipe' method="GET">
+                                <input type="hidden" name="recipe_id" value="{{ comment.recipe.id }}">
+                            </form>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+        {% else %}
+            <div class="align_center">
+                <h2>User not found.</h2>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script src="../static/JS/viewuser.js"></script>
+{% endblock %}
