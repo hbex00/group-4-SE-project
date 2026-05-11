@@ -2,7 +2,7 @@ from flask import Flask, session
 from sqlalchemy import select, String, Text, or_
 from sqlalchemy.orm import DeclarativeMeta
 from sqlalchemy.inspection import inspect
-from app.services.models import Tag
+from app.services.models import Tag,User
 from database.db import db
 
 def text_search_table(pattern,orm_class,class_tags: dict=None):
@@ -30,6 +30,15 @@ def text_search_table(pattern,orm_class,class_tags: dict=None):
 
     #text columns that match the search pattern
     column_match_conditions = [column.ilike(search_pattern) for column in table_text_columns]
+    #Special Case, where search pattern can extend across columns:
+    if orm_class == User:
+        if search_pattern.__contains__(" "):
+            firstname,lastname = pattern.split(" ")
+            firstname = f"{firstname}%"
+            lastname = f"{lastname}%"
+            column_match_conditions = [column.ilike(firstname) for column in table_text_columns]
+            column_match_conditions.extend([column.ilike(lastname) for column in table_text_columns])
+
     #Query where any such match is returned.
     matching_table_query = select(orm_class).where(or_(*column_match_conditions))
 

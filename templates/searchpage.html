@@ -30,7 +30,8 @@
                             <input  type="checkbox"
                                     name="types"
                                     value="{{type_name}}"
-                                    class="type_checkbox"> {{type_name}}<!--data-target="tags_{{type_name}}"-->
+                                    class="type_checkbox"
+                                    {% if type_name == "Recipe" %}checked{% endif %}> {{type_name}}<!--data-target="tags_{{type_name}}"-->
                         </label>
                     </div>
                     {% endfor %}
@@ -88,9 +89,19 @@
 
                         {% elif search_class == "User" %}
                         <div class="recipe_card">
-                            <form action="/userpage" method="GET">
+                            <form action="/viewuser" method="GET">
                                 <h4> {{content.name}}{% if content.last_name %} {{content.last_name}}{% endif %}</h4>
                                 <input type="hidden" name="user_id" value="{{content.id}}">
+                            </form>
+                        </div>
+                        {% endif %}
+                        
+                        {% if search_class == "Comment" %}
+                        <div class="recipe_card">
+                            <form action="/viewrecipe" method="GET">
+                                <h4>{{content.user.name}}{% if content.user.last_name %} {{content.user.last_name}}{% endif %} commented on {{content.recipe.recipe_title}}:</h4>
+                                <h5>{{content.content}}</h5>
+                                <input type="hidden" name="recipe_id" value="{{content.recipe_id}}">
                             </form>
                         </div>
                         {% endif %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, Blueprint, session, flash
 from app.utils.search_db import text_search_table
-from app.services.models import User,Recipe,Tag
+from app.services.models import User,Recipe,Tag,Comment
 from collections import defaultdict
 from database.db import db
 from sqlalchemy import select
@@ -12,7 +12,7 @@ PAGE = 'searchpage.html'
 PATH = '/search'
 FLASHES = True
 FILTERS = None
-SEARCH_TYPES = Recipe.__name__, User.__name__
+SEARCH_TYPES = Recipe.__name__, User.__name__, Comment.__name__
 
 # loads existing tags
 def build_tag_filters():
@@ -44,11 +44,13 @@ def searchpage():
             print(str(information_provided))'''
             pattern = getArgument(arguments=request.form.to_dict(), value="pattern")
             results = {}
-            
+
             for search_class in request.form.getlist("types"):
+                
                 # Try identify the model class of the provided string.
                 try:
                     search_class = get_model_from_string(search_class)
+                    print(search_class)
                 except RuntimeError as error:
                     print("Error :" + str(error))
                     continue

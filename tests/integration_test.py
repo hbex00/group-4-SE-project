@@ -373,6 +373,8 @@ def list_recipes():
     except: raise
 
 def test_search(client):
+    #print(response.get_data(as_text=True))
+
     # Create database entries
     example_user = post_example_user(client)
     example_recipe = post_example_recipe(client,example_user)
@@ -386,39 +388,37 @@ def test_search(client):
     example_user_last_name     = bytes(example_user.last_name, "utf-8")
     example_recipe_title       = bytes(example_recipe.recipe_title, "utf-8")
     example_recipe_description = bytes(example_recipe.description, "utf-8")
-    user_error                 = bytes("No users found.","utf-8")
-    recipe_error               = bytes("No recipes found.","utf-8")
-    full_error                 = bytes("No results found.","utf-8")
+    user_error                 = bytes("No User Found.","utf-8")
+    recipe_error               = bytes("No Recipe Found.","utf-8")
+    recipe_card                = bytes("recipe_card","utf-8")
 
+    ## USER PATTERN CASES
     # Search the database for known user pattern with user filter
-    response = client.post( "/search", data = {"pattern":example_user.name,"filter_user":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_user.name,"types":"User"},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_user_name in response.data
     if example_user.last_name and example_user.last_name != "":
         assert example_user_last_name in response.data
 
-    ## USER PATTERN CASES
     # Search the database for known user pattern with user filter and with recipe filter
-    response = client.post( "/search", data = {"pattern":example_user.name,"filter_user":"on","filter_recipe":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_user.name,"types":["User","Recipe"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
+    assert recipe_error in response.data
     assert example_user_name in response.data
     if example_user.last_name and example_user.last_name != "":
         assert example_user_last_name in response.data
 
     # Search the database for known user pattern without user filter
+    # No filters assigned: No search result provided.
     response = client.post( "/search", data = {"pattern":example_user.name},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
-    print(response.get_data(as_text=True))
-    assert example_user_name not in response.data
-    if example_user.last_name and example_user.last_name != "":
-        assert example_user_last_name not in response.data
-    assert recipe_error in response.data # Since we filter for recipes (by default)
+    assert recipe_card not in response.data
 
     # Search the database for known user pattern without user filter and with recipe filter
-    response = client.post( "/search", data = {"pattern":example_user.name,"filter_recipe":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_user.name,"types":["Recipe"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_user_name not in response.data
@@ -427,22 +427,20 @@ def test_search(client):
     assert recipe_error in response.data # Since we filter for recipes
 
     ## RECIPE PATTERN CASES    
-    # Search the database for known recipe pattern without filter (=defaults as having recipe filter)
+    # Search the database for known recipe pattern without filter (No results expected)
     response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
-    assert example_recipe_title in response.data
-    if example_recipe.description and example_recipe.description != "":
-        assert example_recipe_description in response.data
+    assert recipe_card not in response.data
 
     # Search the database for known recipe pattern without recipe filter and with user filter
-    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,"filter_user":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,"types":["User"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert user_error in response.data # Since we filter for users
 
     # Search the database for known recipe pattern with recipe filter
-    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,"types":["Recipe"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_recipe_title in response.data
@@ -450,7 +448,7 @@ def test_search(client):
         assert example_recipe_description in response.data
 
     # Search the database for known recipe pattern with recipe filter and with user filter
-    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title,"types":["Recipe"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_recipe_title in response.data
@@ -459,7 +457,7 @@ def test_search(client):
     
     ## SMALL PATTERN CASES
     # Search the database for known recipe pattern with recipe filter and with user filter
-    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title[:1],},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title[:1],"types":["Recipe","User"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_recipe_title in response.data
@@ -467,7 +465,7 @@ def test_search(client):
         assert example_recipe_description in response.data
     
     # Search the database for known user pattern with user filter
-    response = client.post( "/search", data = {"pattern":example_user.name[:1],"filter_user":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_user.name[:1],"types":["User"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_user_name in response.data
@@ -475,28 +473,27 @@ def test_search(client):
         assert example_user_last_name in response.data
 
     # Search the database for nothing
-    response = client.post( "/search", data = {"pattern":"","filter_user":"on","filter_recipe":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":"","types":["Recipe","User"]},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
-    assert example_user_name not in response.data
+    assert example_user_name in response.data
     if example_user.last_name and example_user.last_name != "":
-        assert example_user_last_name not in response.data
-    assert example_recipe_title not in response.data
+        assert example_user_last_name in response.data
+    assert example_recipe_title in response.data
     if example_recipe.description and example_recipe.description != "":
-        assert example_recipe_description not in response.data
-    assert full_error in response.data # Since we filter for both users and recipes
+        assert example_recipe_description in response.data
 
     # Search the database for nothing (Too much information for any single metadata -> yields no matches)
-    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title+example_recipe.description,"filter_user":"on","filter_recipe":"on"},follow_redirects=True)
+    response = client.post( "/search", data = {"pattern":example_recipe.recipe_title+example_recipe.description,"types":"User","types":"Recipe"},follow_redirects=True)
     assert response.status_code == 200
     assert response.request.path == '/search' 
     assert example_user_name not in response.data
     if example_user.last_name and example_user.last_name != "":
-        assert example_user_last_name not in response.data
+        assert example_user_last_name not in response.data 
     assert example_recipe_title not in response.data
     if example_recipe.description and example_recipe.description != "":
         assert example_recipe_description not in response.data
-    assert full_error in response.data # Since we filter for both users and recipes
+    assert recipe_card not in response.data # Since we filter for both users and recipes
 
 
     
