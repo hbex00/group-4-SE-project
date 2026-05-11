@@ -17,7 +17,7 @@ def view():
 @view_bp.route('/viewuser', methods=['POST', 'GET'])
 def viewuser(): 
     if request.method == 'POST':
-        return redirect('/') # Nothing Post-able added yet! To the homepage with thee!
+        return redirect('/')
     else:
         try:
             id = request.args.get('user_id', type = int)
