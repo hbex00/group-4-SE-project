@@ -23,7 +23,6 @@
                         <span>Search Types</span>
                     </div>
                 
-                    <!--Should pick up tuples from filter.items, making it dynamic for backend to decide content-->
                     {% for type_name in search_types %}
                     <div class="filter_row">
                         <label>
@@ -31,14 +30,14 @@
                                     name="types"
                                     value="{{type_name}}"
                                     class="type_checkbox"
-                                    {% if type_name == "Recipe" %}checked{% endif %}> {{type_name}}<!--data-target="tags_{{type_name}}"-->
+                                    {% if type_name == "Recipe" %}checked{% endif %}> {{type_name}}
                         </label>
                     </div>
                     {% endfor %}
                     {% endif %}
                     <div class="filter_header"><span>Tags</span></div>
 
-                    <div class="filter_groups"> <!--id="tags_{{type_name}}">-->
+                    <div class="filter_groups">
                         {% for tag, options in filters.items() %}
                         <div class="filter_group">
 
@@ -58,17 +57,14 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <!--
-                    <label><input type="checkbox" name="filter_recipe">Recipes</label>
-                    <label><input type="checkbox" name="filter_user">Users</label>
-                    <label><input type="checkbox" name="filter_tags">tags</label>
-                    -->
                 </div>
             </div>
             {% endif %}
             <button type="submit" id="searchbar_submit">Search</button>
         </form>
+    </div>
 
+    <div class="result_content">
         {% if search_result %}
         <div class="search_result">
 
