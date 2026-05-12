@@ -19,7 +19,7 @@ def modify():
         id = request.form.get('recipe_id', type = int)
         recipe = Recipe.query.filter_by(id=id).first()
 
-        if session.get('id') != recipe.user:
+        if session.get('id') != recipe.user_id:
             return redirect('/')
 
         try:
