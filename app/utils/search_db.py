@@ -1,5 +1,5 @@
 from flask import Flask, session
-from sqlalchemy import select, String, Text, or_
+from sqlalchemy import select, String, Text, or_, and_
 from sqlalchemy.orm import DeclarativeMeta
 from sqlalchemy.inspection import inspect
 from app.services.models import Tag,User
@@ -72,19 +72,21 @@ def text_search_table(pattern,orm_class,class_tags: dict=None):
                                     if column.foreign_keys and any(
                                         fk.column.table == orm_class.__table__
                                         for fk in column.foreign_keys))
-        
-        # Form the query to join its respective tags class (i.e. RecipeTag)
-        matching_table_query = (matching_table_query
-                                .join(orm_class_tag, parent_foreign_key==orm_class.id)
-                                .join(Tag,Tag.id == orm_class_tag.tag_id))
-        
+    
         # For each tag provided in class_tags we update the table query to only return results with matching tag categories and units.
-        for tag_category,tag_units in class_tags.items():
-            matching_table_query = matching_table_query.where(Tag.category == tag_category,Tag.unit.in_(tag_units))
-
+        for tag_category, tag_units in class_tags.items():
+            # Form the query to also join its respective tags class (i.e. RecipeTag) using parent_foreign_key
+            tag_exists = (select(1).select_from(orm_class_tag)
+                          .join(Tag,Tag.id == orm_class_tag.tag_id)
+                          .where(and_(parent_foreign_key==orm_class.id,
+                                      Tag.category==tag_category,
+                                      Tag.unit.in_(tag_units)))
+                          .exists())
+            # Update the existing query to include the tag category and tag unit criteria.
+            matching_table_query = matching_table_query.where(tag_exists)
 
     # The Query will return the matching sets and base it on their class id. Only distinct results are returned.
-    matching_table_query = matching_table_query.group_by(orm_class.id).distinct()
+    matching_table_query = matching_table_query.group_by(orm_class.id)#.distinct()
 
     # Try executing the Query and proceed to return the results
     try:

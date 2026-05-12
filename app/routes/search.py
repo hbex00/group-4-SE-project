@@ -36,12 +36,12 @@ def get_tag_filters():
 def searchpage():
     if request.method == "POST":
         try:
-            '''information_provided = request.form.listvalues()
+            information_provided = request.form.listvalues()
             print(str(information_provided))
             information_provided = request.form.to_dict()
             print(str(information_provided))
             information_provided = request.form.getlist("types")
-            print(str(information_provided))'''
+            print(str(information_provided))
             pattern = getArgument(arguments=request.form.to_dict(), value="pattern")
             results = {}
 
@@ -67,7 +67,10 @@ def searchpage():
                     tag_category, tag_unit = tag_data
                     if "." in tag_category:
                         tag_category = (tag_category.split("."))[0]
-                        class_tags.update({tag_category:tag_unit})
+                        if class_tags.get(tag_category):
+                            class_tags.get(tag_category).extend(tag_unit)
+                        else:
+                            class_tags.update({tag_category:tag_unit})
 
                 # Try to fetch search results from search function in search_db.py
                 try:
