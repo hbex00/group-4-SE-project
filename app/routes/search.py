@@ -17,7 +17,7 @@ SEARCH_TYPES = Recipe.__name__, User.__name__, Comment.__name__
 # loads existing tags
 def build_tag_filters():
     filters = defaultdict(list)
-    tags = db.session.execute(select(Tag.category, Tag.unit).distinct().order_by(Tag.category,Tag.unit)).all()
+    tags = db.session.execute(select(Tag.category, Tag.unit).distinct()).all()
 
     for tag_category,tag_unit in tags:
         filters[tag_category].append(tag_unit)
@@ -36,12 +36,6 @@ def get_tag_filters():
 def searchpage():
     if request.method == "POST":
         try:
-            information_provided = request.form.listvalues()
-            print(str(information_provided))
-            information_provided = request.form.to_dict()
-            print(str(information_provided))
-            information_provided = request.form.getlist("types")
-            print(str(information_provided))
             pattern = getArgument(arguments=request.form.to_dict(), value="pattern")
             results = {}
 
@@ -50,7 +44,6 @@ def searchpage():
                 # Try identify the model class of the provided string.
                 try:
                     search_class = get_model_from_string(search_class)
-                    print(search_class)
                 except RuntimeError as error:
                     print("Error :" + str(error))
                     continue
@@ -88,10 +81,6 @@ def searchpage():
                 # If no exception was encountered, add the results of the class and go to the next search_class iteration.
                 else:
                     results.update({search_class.__name__:class_search_results})
-                
-            # (Verify the structure and results of the returning query.)
-            print(str(results))
-            # {class:[results],class2:[results2],...,classn:[resultsn]}
                 
             return render_template(PAGE,filters=get_tag_filters(),search_types=SEARCH_TYPES,search_result=results)
             

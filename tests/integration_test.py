@@ -552,7 +552,6 @@ def test_general_search(client):
 
         for search_dicts in search_pattern:
             # SEARCH WITH ALL PROVIDED TYPES IN SEARCH_TYPES FOR PATTERN PROVIDED IN SEARCH_PATTERN
-            print(search_dicts)
             for search_class,pattern in search_dicts.items():
                 search_result = search(client,pattern,[types])
 
