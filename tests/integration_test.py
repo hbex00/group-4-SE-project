@@ -1044,6 +1044,16 @@ def test_modify_recipe(client):
     assert result.status_code == 200
     assert result.request.path == '/'
 
+def test_view_user(client):
+    test_user = create_user(client)
+    user = User.query.filter_by(name ='Björk').first()
+    result = client.get("/viewuser",query_string={"user_id":user.id})
+    assert result.status_code == 200
+    assert result.request.full_path == f'/viewuser?user_id=1'
+    result = client.get("/viewuser",query_string={"user_id":3},follow_redirects=True)
+    assert result.request.path == '/'
+    result = client.post("/viewuser",follow_redirects=True)
+    assert result.request.path == '/'
 
 def create_modify_base(used_client, recipe):
     Create_Tags()
@@ -1066,3 +1076,4 @@ def create_user(used_client):
 
     db.session.add(test_user)
     db.session.commit()
+

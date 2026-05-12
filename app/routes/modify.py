@@ -18,6 +18,10 @@ def modify():
     if request.method == 'POST' :
         id = request.form.get('recipe_id', type = int)
         recipe = Recipe.query.filter_by(id=id).first()
+
+        if session.get('id') != recipe.user_id:
+            return redirect('/')
+
         try:
             if request.form['title'].strip() != "":
                 recipe.recipe_title = request.form['title'] 
@@ -70,7 +74,6 @@ def modify():
             if ':' in tags:
                 t = tags.split(':')
                 found_tag = Tag.query.filter_by(category = t[0].strip(), unit = t[1].strip()).first()
-                print(found_tag)
                 if found_tag:
                     tag_add(id, found_tag.id)
 

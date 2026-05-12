@@ -46,7 +46,14 @@
                     <p>{{recipe.tags|length}}</p>
                 {%endif%}
 
-                <h1>Made by: {{recipe.user.name}}</h1>
+                
+                <a href="/viewuser?user_id={{recipe.user.id}}">
+                    <h1>
+                        Made by: {{ recipe.user.name }}
+                    </h1>
+                </a>
+                
+
                 {% if recipe.user.id == session.get('id') %}
                 <form action="/modify" method="GET">
                     <input type="hidden" name="recipe_id" value="{{recipe.id}}">
