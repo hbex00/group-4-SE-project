@@ -74,7 +74,6 @@ def modify():
             if ':' in tags:
                 t = tags.split(':')
                 found_tag = Tag.query.filter_by(category = t[0].strip(), unit = t[1].strip()).first()
-                print(found_tag)
                 if found_tag:
                     tag_add(id, found_tag.id)
 
