@@ -78,7 +78,14 @@
                         <div class="recipe_card">
                             <form action="/viewrecipe" method="GET">
                                 <h4>{{content.id}}.  {{content.recipe_title}}</h4>
-                                <h5> {{content.description}}</h5>
+                                <h5>{{content.description}}</h5>
+                                {% if content.tags %}
+                                <div class="tag_form">
+                                    {% for tag in content.tags %}
+                                    <h6>{{tag.tag.category}}: {{tag.tag.unit}} </h6>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                                 <input type="hidden" name="recipe_id" value="{{content.id}}">
                             </form>
                         </div>
@@ -87,6 +94,13 @@
                         <div class="recipe_card">
                             <form action="/viewuser" method="GET">
                                 <h4> {{content.name}}{% if content.last_name %} {{content.last_name}}{% endif %}</h4>
+                                {% if content.tags %}
+                                <div class="tag_form">
+                                    {% for tag in content.tags %}
+                                    <h6>{{tag.tag.category}}: {{tag.tag.unit}} </h6>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                                 <input type="hidden" name="user_id" value="{{content.id}}">
                             </form>
                         </div>
@@ -98,6 +112,13 @@
                                 <h4>{{content.user.name}}{% if content.user.last_name %} {{content.user.last_name}}{% endif %} commented on {{content.recipe.recipe_title}}:</h4>
                                 <h5>{{content.content}}</h5>
                                 {% if content.user_reviews %}<h5>{{content.user_reviews.rating}}/5</h5>{% endif %}
+                                {% if content.tags %}
+                                <div class="tag_form">
+                                    {% for tag in content.tags %}
+                                    <h6>{{tag.tag.category}}: {{tag.tag.unit}} </h6>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                                 <input type="hidden" name="recipe_id" value="{{content.recipe_id}}">
                             </form>
                         </div>

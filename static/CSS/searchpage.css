@@ -188,3 +188,10 @@
     border: 1px solid white;
     background-color: #23862e;
 }
+
+.tag_form h6 {
+    display: inline;
+    margin: 3px;
+    color: var(--base-green);
+    padding: 2px;
+}
